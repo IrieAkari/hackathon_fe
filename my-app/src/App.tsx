@@ -5,7 +5,7 @@ import LoginForm from './components/LoginForm';
 import SignUpForm from './components/SignUpForm';
 import SuccessPage from './components/SuccessPage';
 
-function App() {
+const App: React.FC = () => {
   return (
     <Router>
       <div className="App">
