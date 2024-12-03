@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { signOut, deleteUser } from 'firebase/auth';
 import { fireAuth } from '../firebase';
 
-const SuccessPage = () => {
+const SuccessPage: React.FC = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {

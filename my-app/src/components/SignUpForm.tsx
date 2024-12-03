@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
 import { fireAuth } from '../firebase';
 
-const SignUpForm = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+const SignUpForm: React.FC = () => {
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [error, setError] = useState<string>('');
 
-    const handleSignUp = async (e) => {
+    const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
         try {
@@ -19,7 +19,7 @@ const SignUpForm = () => {
             await createUserWithEmailAndPassword(fireAuth, email, password);
             alert('アカウントが作成されました: ' + email);
         }
-        } catch (error) {
+        } catch (error: any) {
         setError(error.message);
         }
     };

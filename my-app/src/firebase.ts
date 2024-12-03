@@ -1,10 +1,8 @@
-// Import the functions you need from the SDKs you need
+// 必要なSDKの関数をインポート
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
+// Firebaseの設定
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
     authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -14,8 +12,7 @@ const firebaseConfig = {
     appId: process.env.REACT_APP_APP_ID,
 };
 
-
-// Initialize Firebase
+// Firebaseを初期化
 const app = initializeApp(firebaseConfig);
 
 export const fireAuth = getAuth(app);
