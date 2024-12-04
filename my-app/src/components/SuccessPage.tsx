@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { signOut, deleteUser } from 'firebase/auth';
 import { fireAuth } from '../firebase';
 
@@ -38,6 +38,9 @@ const SuccessPage: React.FC = () => {
         <h2>ログイン成功</h2>
         <button onClick={handleLogout}>Logout</button>
         <button onClick={handleDeleteAccount}>Delete Account</button>
+        <div style={{ position: 'fixed', bottom: 10, right: 10 }}>
+            <Link to="/mypage">マイページ</Link>
+        </div>
         </div>
     );
 };
