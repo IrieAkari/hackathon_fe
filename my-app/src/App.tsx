@@ -4,6 +4,7 @@ import './App.css';
 import LoginForm from './components/LoginForm';
 import SignUpForm from './components/SignUpForm';
 import SuccessPage from './components/SuccessPage';
+import Mypage from './components/Mypage';
 
 const App: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const App: React.FC = () => {
             <Route path="/" element={<LoginForm />} />
             <Route path="/signup" element={<SignUpForm />} />
             <Route path="/success" element={<SuccessPage />} />
+            <Route path="/mypage" element={<Mypage />} />
           </Routes>
         </header>
       </div>
