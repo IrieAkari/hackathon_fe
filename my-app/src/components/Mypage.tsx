@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
 //import { API_BASE_URL } from '../config';
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://hackathon-be-509846548823.us-central1.run.app';
 
 const Mypage: React.FC = () => {
     const [name, setName] = useState<string>('');

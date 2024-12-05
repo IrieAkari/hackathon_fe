@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
 import { fireAuth } from '../firebase';
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://hackathon-be-509846548823.us-central1.run.app';
 
 const SignUpForm: React.FC = () => {
     const [name, setName] = useState<string>('');
