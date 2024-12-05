@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
+import { API_BASE_URL } from '../config';
 
 const Mypage: React.FC = () => {
     const [name, setName] = useState<string>('');
@@ -11,7 +12,7 @@ const Mypage: React.FC = () => {
             const user = auth.currentUser;
             if (user) {
                 try {
-                    const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/useremail?email=${user.email}`);
+                    const response = await fetch(`${API_BASE_URL}/useremail?email=${user.email}`);
                     if (!response.ok) {
                         throw new Error('Failed to fetch user name');
                     }
