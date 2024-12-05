@@ -11,6 +11,8 @@ interface Post {
     content: string;
     created_at: string;
     parent_id: string | null;
+    likes_count: number;
+    replys_count: number;
 }
 
 const PostDetail: React.FC = () => {
@@ -83,9 +85,11 @@ const PostDetail: React.FC = () => {
                         親投稿
                     </button>
                 )}
-                <h3>{post.user_name}</h3>
+                <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
                 <p>{post.content}</p>
-                <p><small>{new Date(post.created_at).toLocaleString()}</small></p>
+                <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
+                    いいね {post.likes_count}　リプライ {post.replys_count}
+                </div>
                 <button 
                     onClick={handleCreateReplyClick} 
                     className="create-reply-button"
@@ -105,6 +109,9 @@ const PostDetail: React.FC = () => {
                         <span className="reply-label">リプライ</span>
                         <h3>{reply.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(reply.created_at).toLocaleString()}</span></h3>
                         <p>{reply.content}</p>
+                        <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
+                            いいね {reply.likes_count}　リプライ {reply.replys_count}
+                        </div>
                     </div>
                 ))
             ) : (

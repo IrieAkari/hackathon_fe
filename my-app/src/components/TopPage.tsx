@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { fireAuth } from '../firebase';
+//import { fireAuth } from '../firebase';
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -10,6 +10,8 @@ interface Post {
     user_name: string;
     content: string;
     created_at: string;
+    likes_count: number;
+    replys_count: number;
 }
 
 const TopPage: React.FC = () => {
@@ -45,6 +47,9 @@ const TopPage: React.FC = () => {
                     >
                         <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
                         <p>{post.content}</p>
+                        <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
+                            いいね {post.likes_count}　リプライ {post.replys_count}
+                        </div>
                     </div>
                 ))}
             </div>

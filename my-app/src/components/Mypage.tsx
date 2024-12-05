@@ -11,6 +11,8 @@ interface Post {
     content: string;
     created_at: string;
     parent_id: string | null;
+    likes_count: number;
+    replys_count: number;
 }
 
 const Mypage: React.FC = () => {
@@ -137,6 +139,9 @@ const Mypage: React.FC = () => {
                         )}
                         <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
                         <p>{post.content}</p>
+                        <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
+                            いいね {post.likes_count}　リプライ {post.replys_count}
+                        </div>
                     </div>
                 ))}
             </div>
