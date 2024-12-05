@@ -1,67 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth, signOut, deleteUser } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
+import { fetchUserName } from '../utils/fetchUserName';
+import { fetchUserPosts } from '../utils/fetchUserPosts';
+import { fetchLikedPosts } from '../utils/fetchLikedPosts';
+import { Post } from '../types';
 
 const API_BASE_URL = 'http://localhost:8000';
-
-interface Post {
-    id: string;
-    user_id: string;
-    user_name: string;
-    content: string;
-    created_at: string;
-    parent_id: string | null;
-    likes_count: number;
-    replys_count: number;
-}
 
 const Mypage: React.FC = () => {
     const [name, setName] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [posts, setPosts] = useState<Post[]>([]);
+    const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set<string>());
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchUserName = async () => {
-            const auth = getAuth();
-            const user = auth.currentUser;
-            if (user) {
-                try {
-                    const response = await fetch(`${API_BASE_URL}/useremail?email=${user.email}`);
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch user name');
-                    }
-                    const data = await response.json();
-                    if (data.length > 0) {
-                        setName(data[0].name);
-                    } else {
-                        setName('No Name');
-                    }
-                } catch (error: any) {
-                    setError(error.message);
-                }
-            }
-        };
-
-        const fetchUserPosts = async () => {
-            const auth = getAuth();
-            const user = auth.currentUser;
-            if (user) {
-                try {
-                    const response = await fetch(`${API_BASE_URL}/posts?email=${user.email}`);
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch user posts');
-                    }
-                    const data = await response.json();
-                    setPosts(data);
-                } catch (error: any) {
-                    setError(error.message);
-                }
-            }
-        };
-
-        fetchUserName();
-        fetchUserPosts();
+        fetchUserName(setName, setError);
+        fetchUserPosts(setPosts, setError);
+        fetchLikedPosts(setLikedPosts, setError);
     }, []);
 
     const handleLogout = () => {
@@ -104,6 +61,8 @@ const Mypage: React.FC = () => {
         navigate(`/posts/${id}`);
     };
 
+    const isLiked = (postId: string) => likedPosts.has(postId);
+
     return (
         <div>
             <div style={{ position: 'fixed', top: 10, right: 10 }}>
@@ -140,7 +99,7 @@ const Mypage: React.FC = () => {
                         <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
                         <p>{post.content}</p>
                         <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-                            いいね {post.likes_count}　リプライ {post.replys_count}
+                            <span style={{ color: isLiked(post.id) ? 'pink' : 'inherit' }}>いいね {post.likes_count}</span>　リプライ {post.replys_count}
                         </div>
                     </div>
                 ))}

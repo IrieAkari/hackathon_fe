@@ -1,37 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-//import { fireAuth } from '../firebase';
-
-const API_BASE_URL = 'http://localhost:8000';
-
-interface Post {
-    id: string;
-    user_id: string;
-    user_name: string;
-    content: string;
-    created_at: string;
-    likes_count: number;
-    replys_count: number;
-}
+import { fetchPosts } from '../utils/fetchPosts';
+import { fetchLikedPosts } from '../utils/fetchLikedPosts';
+import { Post } from '../types';
 
 const TopPage: React.FC = () => {
     const [posts, setPosts] = useState<Post[]>([]);
+    const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set<string>());
+    const [error, setError] = useState<string>('');
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/posts`)
-            .then(response => response.json())
-            .then(data => setPosts(data))
-            .catch(error => console.error('Error fetching posts:', error));
+        fetchPosts(setPosts, setError);
+        fetchLikedPosts(setLikedPosts, setError);
     }, []);
 
     const handlePostClick = (id: string) => {
         navigate(`/posts/${id}`);
     };
 
+    const isLiked = (postId: string) => likedPosts.has(postId);
+
     return (
         <div>
             <h2>最新の投稿</h2>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
                 {posts.map(post => (
                     <div 
@@ -48,7 +41,7 @@ const TopPage: React.FC = () => {
                         <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
                         <p>{post.content}</p>
                         <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-                            いいね {post.likes_count}　リプライ {post.replys_count}
+                            <span style={{ color: isLiked(post.id) ? 'pink' : 'inherit' }}>いいね {post.likes_count}</span>　リプライ {post.replys_count}
                         </div>
                     </div>
                 ))}
