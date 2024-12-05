@@ -23,17 +23,26 @@ const TopPage: React.FC = () => {
             .catch(error => console.error('Error fetching posts:', error));
     }, []);
 
+    const handlePostClick = (id: string) => {
+        navigate(`/posts/${id}`);
+    };
+
     return (
         <div>
-            <h2>ログイン成功</h2>
+            <h2>最新の投稿</h2>
             <div>
                 {posts.map(post => (
-                    <div key={post.id} style={{ 
-                        border: '1px solid #ccc', 
-                        padding: '20px', 
-                        margin: '10px 0', 
-                        width: '800px'
-                        }}>
+                    <div 
+                        key={post.id} 
+                        style={{ 
+                            border: '1px solid #ccc', 
+                            padding: '20px', 
+                            margin: '10px 0', 
+                            width: '800px',
+                            cursor: 'pointer'
+                        }}
+                        onClick={() => handlePostClick(post.id)}
+                    >
                         <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
                         <p>{post.content}</p>
                     </div>

@@ -99,14 +99,12 @@ const Mypage: React.FC = () => {
 
     return (
         <div>
-            <h2>マイページ</h2>
-            {error ? (
-                <p style={{ color: 'red' }}>{error}</p>
-            ) : (
-                <p>ユーザー名: {name}</p>
-            )}
-            <button onClick={handleLogout}>Logout</button>
-            <button onClick={handleDeleteAccount}>Delete Account</button>
+            <div style={{ position: 'fixed', top: 10, right: 10 }}>
+                <button onClick={handleLogout} style={{ marginRight: '10px' }}>Logout</button>
+                <button onClick={handleDeleteAccount}>Delete Account</button>
+                </div>
+            <h1>{name}</h1>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
                 {posts.map(post => (
                     <div key={post.id} style={{ 
