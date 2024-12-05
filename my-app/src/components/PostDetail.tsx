@@ -9,6 +9,7 @@ interface Post {
     user_name: string;
     content: string;
     created_at: string;
+    parent_id: string | null;
 }
 
 const PostDetail: React.FC = () => {
@@ -19,7 +20,7 @@ const PostDetail: React.FC = () => {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL}/posts/${id}`);
+                const response = await fetch(`${API_BASE_URL}/postget?postid=${id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch post');
                 }
