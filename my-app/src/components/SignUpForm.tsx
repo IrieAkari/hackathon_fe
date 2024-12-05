@@ -22,8 +22,8 @@ const SignUpForm: React.FC = () => {
                 alert('アカウントが作成されました: ' + email);
 
                 // バックエンドにユーザー情報を送信
-                //const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/register`, {
-                    const response = await fetch(`${API_BASE_URL}/register`, {
+                //const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/userregister`, {
+                    const response = await fetch(`${API_BASE_URL}/userregister`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

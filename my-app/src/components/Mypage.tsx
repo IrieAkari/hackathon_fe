@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { getAuth } from 'firebase/auth';
-//import { API_BASE_URL } from '../config';
+import { getAuth, signOut, deleteUser } from 'firebase/auth';
+import { Link, useNavigate } from 'react-router-dom';
+
 const API_BASE_URL = 'http://localhost:8000';
 
 const Mypage: React.FC = () => {
     const [name, setName] = useState<string>('');
     const [error, setError] = useState<string>('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserName = async () => {
@@ -13,7 +15,6 @@ const Mypage: React.FC = () => {
             const user = auth.currentUser;
             if (user) {
                 try {
-                    //const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/useremail?email=${user.email}`);
                     const response = await fetch(`${API_BASE_URL}/useremail?email=${user.email}`);
                     if (!response.ok) {
                         throw new Error('Failed to fetch user name');
@@ -33,6 +34,33 @@ const Mypage: React.FC = () => {
         fetchUserName();
     }, []);
 
+    const handleLogout = () => {
+        signOut(getAuth())
+            .then(() => {
+                alert('ログアウトしました');
+                navigate('/');
+            })
+            .catch((error) => {
+                alert(error.message);
+            });
+    };
+
+    const handleDeleteAccount = () => {
+        const user = getAuth().currentUser;
+        if (user) {
+            deleteUser(user)
+                .then(() => {
+                    alert('アカウントが削除されました');
+                    navigate('/');
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
+        } else {
+            alert('ユーザーが見つかりません');
+        }
+    };
+
     return (
         <div>
             <h2>マイページ</h2>
@@ -41,6 +69,13 @@ const Mypage: React.FC = () => {
             ) : (
                 <p>ユーザー名: {name}</p>
             )}
+            <button onClick={handleLogout}>Logout</button>
+            <button onClick={handleDeleteAccount}>Delete Account</button>
+            <div style={{ position: 'fixed', bottom: 10, right: 10 }}>
+                <Link to="/createpost" style={{ color: 'white', marginRight: '10px' }}>新規投稿</Link>
+                <br />
+                <Link to="/" style={{ color: 'white' }}>ログインページに戻る</Link>
+            </div>
         </div>
     );
 };

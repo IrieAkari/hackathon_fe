@@ -18,7 +18,7 @@ const LoginForm: React.FC = () => {
         .then((userCredential) => {
             const user = userCredential.user;
             alert('ログインユーザー: ' + user.email);
-            navigate('/success');
+            navigate('/top');
         })
         .catch((error) => {
             if (error.code === 'auth/user-not-found') {
