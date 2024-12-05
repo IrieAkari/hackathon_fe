@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { fireAuth } from '../firebase';
+const API_BASE_URL = 'http://localhost:8000';
+
 
 const LoginForm: React.FC = () => {
     const [email, setEmail] = useState<string>('');

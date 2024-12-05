@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
 import { fireAuth } from '../firebase';
-import { API_BASE_URL } from '../config';
+const API_BASE_URL = 'http://localhost:8000';
 
 const SignUpForm: React.FC = () => {
     const [name, setName] = useState<string>('');
@@ -18,12 +18,12 @@ const SignUpForm: React.FC = () => {
             if (signInMethods.length > 0) {
                 setError('このメールアドレスは既に使用されています。');
             } else {
-                const userCredential = await createUserWithEmailAndPassword(fireAuth, email, password);
-                const user = userCredential.user;
+                await createUserWithEmailAndPassword(fireAuth, email, password);
                 alert('アカウントが作成されました: ' + email);
 
                 // バックエンドにユーザー情報を送信
-                const response = await fetch(`${API_BASE_URL}/register`, {
+                //const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/register`, {
+                    const response = await fetch(`${API_BASE_URL}/register`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -75,6 +75,7 @@ const SignUpForm: React.FC = () => {
             <p>
                 既にアカウントをお持ちですか？ <Link to="/">ログインページに戻る</Link>
             </p>
+            <p>API Base URL: {API_BASE_URL}</p>
         </div>
     );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { signOut, deleteUser } from 'firebase/auth';
 import { fireAuth } from '../firebase';
+const API_BASE_URL = 'http://localhost:8000';
 
 const SuccessPage: React.FC = () => {
     const navigate = useNavigate();
