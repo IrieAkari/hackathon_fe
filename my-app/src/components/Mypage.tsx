@@ -10,6 +10,7 @@ interface Post {
     user_name: string;
     content: string;
     created_at: string;
+    parent_id: string | null;
 }
 
 const Mypage: React.FC = () => {
@@ -118,10 +119,22 @@ const Mypage: React.FC = () => {
                             padding: '20px', 
                             margin: '10px 0', 
                             width: '800px',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
+                            position: 'relative'
                         }}
                         onClick={() => handlePostClick(post.id)}
                     >
+                        {post.parent_id && (
+                            <span style={{ 
+                                position: 'absolute', 
+                                top: '10px', 
+                                right: '10px', 
+                                color: 'yellow', 
+                                fontWeight: 'bold' 
+                            }}>
+                                リプライ
+                            </span>
+                        )}
                         <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
                         <p>{post.content}</p>
                     </div>
