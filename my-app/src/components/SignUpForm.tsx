@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
 import { fireAuth } from '../firebase';
+import { API_BASE_URL } from '../config';
 
 const SignUpForm: React.FC = () => {
     const [name, setName] = useState<string>('');
@@ -22,7 +23,7 @@ const SignUpForm: React.FC = () => {
                 alert('アカウントが作成されました: ' + email);
 
                 // バックエンドにユーザー情報を送信
-                const response = await fetch('http://localhost:8000/register', {
+                const response = await fetch(`${API_BASE_URL}/register`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
