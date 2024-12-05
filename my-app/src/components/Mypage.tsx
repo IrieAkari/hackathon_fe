@@ -4,9 +4,18 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const API_BASE_URL = 'http://localhost:8000';
 
+interface Post {
+    id: string;
+    user_id: string;
+    user_name: string;
+    content: string;
+    created_at: string;
+}
+
 const Mypage: React.FC = () => {
     const [name, setName] = useState<string>('');
     const [error, setError] = useState<string>('');
+    const [posts, setPosts] = useState<Post[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,7 +40,25 @@ const Mypage: React.FC = () => {
             }
         };
 
+        const fetchUserPosts = async () => {
+            const auth = getAuth();
+            const user = auth.currentUser;
+            if (user) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/posts?email=${user.email}`);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user posts');
+                    }
+                    const data = await response.json();
+                    setPosts(data);
+                } catch (error: any) {
+                    setError(error.message);
+                }
+            }
+        };
+
         fetchUserName();
+        fetchUserPosts();
     }, []);
 
     const handleLogout = () => {
@@ -45,17 +72,26 @@ const Mypage: React.FC = () => {
             });
     };
 
-    const handleDeleteAccount = () => {
+    const handleDeleteAccount = async () => {
         const user = getAuth().currentUser;
         if (user) {
-            deleteUser(user)
-                .then(() => {
-                    alert('アカウントが削除されました');
-                    navigate('/');
-                })
-                .catch((error) => {
-                    alert(error.message);
+            try {
+                // Firebase アカウントの削除
+                await deleteUser(user);
+
+                // ユーザーを削除
+                const response = await fetch(`${API_BASE_URL}/userdelete?email=${user.email}`, {
+                    method: 'GET',
                 });
+                if (!response.ok) {
+                    throw new Error('Failed to delete user from database');
+                }
+
+                alert('アカウントが削除されました');
+                navigate('/');
+            } catch (error: any) {
+                alert(error.message);
+            }
         } else {
             alert('ユーザーが見つかりません');
         }
@@ -71,10 +107,23 @@ const Mypage: React.FC = () => {
             )}
             <button onClick={handleLogout}>Logout</button>
             <button onClick={handleDeleteAccount}>Delete Account</button>
+            <div>
+                {posts.map(post => (
+                    <div key={post.id} style={{ 
+                        border: '1px solid #ccc', 
+                        padding: '20px', 
+                        margin: '10px 0', 
+                        width: '800px'
+                        }}>
+                        <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
+                        <p>{post.content}</p>
+                    </div>
+                ))}
+            </div>
             <div style={{ position: 'fixed', bottom: 10, right: 10 }}>
                 <Link to="/createpost" style={{ color: 'white', marginRight: '10px' }}>新規投稿</Link>
                 <br />
-                <Link to="/" style={{ color: 'white' }}>ログインページに戻る</Link>
+                <Link to="/top" style={{ color: 'white' }}>ホーム</Link>
             </div>
         </div>
     );
