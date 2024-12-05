@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -48,6 +48,12 @@ const PostDetail: React.FC = () => {
             <h3>{post.user_name}</h3>
             <p>{post.content}</p>
             <p><small>{new Date(post.created_at).toLocaleString()}</small></p>
+            <div style={{ position: 'fixed', bottom: 10, left: 10 }}>
+                <Link to="/top" style={{ color: 'white', marginRight: '10px' }}>ホーム</Link>
+            </div>
+            <div style={{ position: 'fixed', bottom: 10, right: 10 }}>
+                <Link to="/mypage" style={{ color: 'white' }}>マイページ</Link>
+            </div>
         </div>
     );
 };

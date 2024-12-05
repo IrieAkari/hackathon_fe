@@ -97,31 +97,41 @@ const Mypage: React.FC = () => {
         }
     };
 
+    const handlePostClick = (id: string) => {
+        navigate(`/posts/${id}`);
+    };
+
     return (
         <div>
             <div style={{ position: 'fixed', top: 10, right: 10 }}>
                 <button onClick={handleLogout} style={{ marginRight: '10px' }}>Logout</button>
                 <button onClick={handleDeleteAccount}>Delete Account</button>
-                </div>
+            </div>
             <h1>{name}</h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
                 {posts.map(post => (
-                    <div key={post.id} style={{ 
-                        border: '1px solid #ccc', 
-                        padding: '20px', 
-                        margin: '10px 0', 
-                        width: '800px'
-                        }}>
+                    <div 
+                        key={post.id} 
+                        style={{ 
+                            border: '1px solid #ccc', 
+                            padding: '20px', 
+                            margin: '10px 0', 
+                            width: '800px',
+                            cursor: 'pointer'
+                        }}
+                        onClick={() => handlePostClick(post.id)}
+                    >
                         <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
                         <p>{post.content}</p>
                     </div>
                 ))}
             </div>
+            <div style={{ position: 'fixed', bottom: 10, left: 10 }}>
+                <Link to="/top" style={{ color: 'white', marginRight: '10px' }}>ホーム</Link>
+            </div>
             <div style={{ position: 'fixed', bottom: 10, right: 10 }}>
                 <Link to="/createpost" style={{ color: 'white', marginRight: '10px' }}>新規投稿</Link>
-                <br />
-                <Link to="/top" style={{ color: 'white' }}>ホーム</Link>
             </div>
         </div>
     );

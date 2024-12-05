@@ -29,7 +29,7 @@ const CreatePost: React.FC = () => {
                     throw new Error('Failed to create post');
                 }
                 alert('投稿が作成されました');
-                navigate('/top');
+                navigate('/mypage'); // 投稿成功後にMypageに遷移
             } catch (error: any) {
                 setError(error.message);
             }
@@ -59,8 +59,10 @@ const CreatePost: React.FC = () => {
                 {error && <p style={{ color: 'red' }}>{error}</p>}
                 <button type="submit">投稿</button>
             </form>
+            <div style={{ position: 'fixed', bottom: 10, left: 10 }}>
+                <Link to="/top" style={{ color: 'white', marginRight: '10px' }}>ホーム</Link>
+            </div>
             <div style={{ position: 'fixed', bottom: 10, right: 10 }}>
-                <Link to="/top" style={{ color: 'white', marginRight: '10px' }}>トップページ</Link>
                 <Link to="/mypage" style={{ color: 'white' }}>マイページ</Link>
             </div>
         </div>
