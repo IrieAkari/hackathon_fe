@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import './PostDetail.css';
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -17,6 +18,7 @@ const PostDetail: React.FC = () => {
     const [post, setPost] = useState<Post | null>(null);
     const [replies, setReplies] = useState<Post[]>([]);
     const [error, setError] = useState<string>('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -57,34 +59,40 @@ const PostDetail: React.FC = () => {
         return <p>Loading...</p>;
     }
 
+    const handleParentPostClick = (parentId: string) => {
+        navigate(`/posts/${parentId}`);
+    };
+
+    const handleReplyClick = (replyId: string) => {
+        navigate(`/posts/${replyId}`);
+    };
+
     return (
         <div>
             <h2>投稿詳細</h2>
-            <h3>{post.user_name}</h3>
-            <p>{post.content}</p>
-            <p><small>{new Date(post.created_at).toLocaleString()}</small></p>
+            <div className="post-container">
+                {post.parent_id && (
+                    <button 
+                        onClick={() => handleParentPostClick(post.parent_id!)} 
+                        className="parent-post-button"
+                    >
+                        親投稿
+                    </button>
+                )}
+                <h3>{post.user_name}</h3>
+                <p>{post.content}</p>
+                <p><small>{new Date(post.created_at).toLocaleString()}</small></p>
+            </div>
             <h3>リプライ</h3>
             {replies && replies.length > 0 ? (
                 replies.map(reply => (
                     <div 
                         key={reply.id} 
-                        style={{ 
-                            border: '1px solid #ccc', 
-                            padding: '20px', 
-                            margin: '10px 0', 
-                            width: '800px',
-                            position: 'relative'
-                        }}
+                        className="reply-container"
+                        onClick={() => handleReplyClick(reply.id)}
+                        style={{ cursor: 'pointer' }}
                     >
-                        <span style={{ 
-                            position: 'absolute', 
-                            top: '10px', 
-                            right: '10px', 
-                            color: 'yellow', 
-                            fontWeight: 'bold' 
-                        }}>
-                            リプライ
-                        </span>
+                        <span className="reply-label">リプライ</span>
                         <h3>{reply.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(reply.created_at).toLocaleString()}</span></h3>
                         <p>{reply.content}</p>
                     </div>
@@ -92,10 +100,10 @@ const PostDetail: React.FC = () => {
             ) : (
                 <p>リプライはありません</p>
             )}
-            <div style={{ position: 'fixed', bottom: 10, left: 10 }}>
+            <div className="fixed-bottom-left">
                 <Link to="/top" style={{ color: 'white', marginRight: '10px' }}>ホーム</Link>
             </div>
-            <div style={{ position: 'fixed', bottom: 10, right: 10 }}>
+            <div className="fixed-bottom-right">
                 <Link to="/mypage" style={{ color: 'white' }}>マイページ</Link>
             </div>
         </div>
