@@ -1,21 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-//import { getAuth } from 'firebase/auth';
 import './PostDetail.css';
+import { fetchPost } from '../utils/fetchPost';
+import { fetchReplies } from '../utils/fetchReplies';
 import { fetchLikedPosts } from '../utils/fetchLikedPosts';
-
-const API_BASE_URL = 'http://localhost:8000';
-
-interface Post {
-    id: string;
-    user_id: string;
-    user_name: string;
-    content: string;
-    created_at: string;
-    parent_id: string | null;
-    likes_count: number;
-    replys_count: number;
-}
+import { Post } from '../types';
 
 const PostDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -26,35 +15,11 @@ const PostDetail: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchPost = async () => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/postget?postid=${id}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch post');
-                }
-                const data = await response.json();
-                setPost(data);
-            } catch (error: any) {
-                setError(error.message);
-            }
-        };
-
-        const fetchReplies = async () => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/replys?parentid=${id}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch replies');
-                }
-                const data = await response.json();
-                setReplies(data);
-            } catch (error: any) {
-                setError(error.message);
-            }
-        };
-
-        fetchPost();
-        fetchReplies();
-        fetchLikedPosts(setLikedPosts, setError);
+        if (id) {
+            fetchPost(id, setPost, setError);
+            fetchReplies(id, setReplies, setError);
+            fetchLikedPosts(setLikedPosts, setError);
+        }
     }, [id]);
 
     if (error) {
