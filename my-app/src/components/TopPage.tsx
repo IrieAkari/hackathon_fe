@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { fetchPosts } from '../utils/fetchPosts';
 import { fetchLikedPosts } from '../utils/fetchLikedPosts';
+import { toggleLike } from '../utils/toggleLike';
 import { Post } from '../types';
 
 const TopPage: React.FC = () => {
@@ -17,6 +18,11 @@ const TopPage: React.FC = () => {
 
     const handlePostClick = (id: string) => {
         navigate(`/posts/${id}`);
+    };
+
+    const handleLikeClick = (postId: string) => {
+        const isLiked = likedPosts.has(postId);
+        toggleLike(postId, isLiked, setLikedPosts, setPosts, setError);
     };
 
     const isLiked = (postId: string) => likedPosts.has(postId);
@@ -41,7 +47,15 @@ const TopPage: React.FC = () => {
                         <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
                         <p>{post.content}</p>
                         <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-                            <span style={{ color: isLiked(post.id) ? 'pink' : 'inherit' }}>いいね {post.likes_count}</span>　リプライ {post.replys_count}
+                            <span 
+                                style={{ color: isLiked(post.id) ? 'pink' : 'inherit', cursor: 'pointer' }} 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleLikeClick(post.id);
+                                }}
+                            >
+                                いいね {post.likes_count}
+                            </span>　リプライ {post.replys_count}
                         </div>
                     </div>
                 ))}
