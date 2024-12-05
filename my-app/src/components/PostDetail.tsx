@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+//import { getAuth } from 'firebase/auth';
 import './PostDetail.css';
+import { fetchLikedPosts } from '../utils/fetchLikedPosts';
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -19,6 +21,7 @@ const PostDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [post, setPost] = useState<Post | null>(null);
     const [replies, setReplies] = useState<Post[]>([]);
+    const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set<string>());
     const [error, setError] = useState<string>('');
     const navigate = useNavigate();
 
@@ -51,6 +54,7 @@ const PostDetail: React.FC = () => {
 
         fetchPost();
         fetchReplies();
+        fetchLikedPosts(setLikedPosts, setError);
     }, [id]);
 
     if (error) {
@@ -73,6 +77,8 @@ const PostDetail: React.FC = () => {
         navigate(`/createreply/${id}`);
     };
 
+    const isLiked = (postId: string) => likedPosts.has(postId);
+
     return (
         <div>
             <h2>投稿詳細</h2>
@@ -88,7 +94,7 @@ const PostDetail: React.FC = () => {
                 <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
                 <p>{post.content}</p>
                 <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-                    いいね {post.likes_count}　リプライ {post.replys_count}
+                    <span style={{ color: isLiked(post.id) ? 'pink' : 'inherit' }}>いいね {post.likes_count}</span>　リプライ {post.replys_count}
                 </div>
                 <button 
                     onClick={handleCreateReplyClick} 
@@ -110,7 +116,7 @@ const PostDetail: React.FC = () => {
                         <h3>{reply.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(reply.created_at).toLocaleString()}</span></h3>
                         <p>{reply.content}</p>
                         <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-                            いいね {reply.likes_count}　リプライ {reply.replys_count}
+                            <span style={{ color: isLiked(reply.id) ? 'pink' : 'inherit' }}>いいね {reply.likes_count}</span>　リプライ {reply.replys_count}
                         </div>
                     </div>
                 ))
