@@ -1,42 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { fireAuth } from '../firebase';
+import { fetchParentPost } from '../utils/fetchParentPost';
+import { fetchLikedPosts } from '../utils/fetchLikedPosts';
+import { Post } from '../types';
 
 const API_BASE_URL = 'http://localhost:8000';
-
-interface Post {
-    id: string;
-    user_id: string;
-    user_name: string;
-    content: string;
-    created_at: string;
-    parent_id: string | null;
-    likes_count: number;
-    replys_count: number;
-}
 
 const CreateReply: React.FC = () => {
     const { parentId } = useParams<{ parentId: string }>();
     const [content, setContent] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [parentPost, setParentPost] = useState<Post | null>(null);
+    const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set<string>());
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchParentPost = async () => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/postget?postid=${parentId}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch parent post');
-                }
-                const data = await response.json();
-                setParentPost(data);
-            } catch (error: any) {
-                setError(error.message);
-            }
-        };
-
-        fetchParentPost();
+        if (parentId) {
+            fetchParentPost(parentId, setParentPost, setError);
+            fetchLikedPosts(setLikedPosts, setError);
+        }
     }, [parentId]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -68,6 +51,8 @@ const CreateReply: React.FC = () => {
         }
     };
 
+    const isLiked = (postId: string) => likedPosts.has(postId);
+
     return (
         <div>
             <h2>リプライ作成</h2>
@@ -84,7 +69,7 @@ const CreateReply: React.FC = () => {
                     <h3>{parentPost.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(parentPost.created_at).toLocaleString()}</span></h3>
                     <p>{parentPost.content}</p>
                     <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-                        いいね {parentPost.likes_count}　リプライ {parentPost.replys_count}
+                        <span style={{ color: isLiked(parentPost.id) ? 'pink' : 'inherit' }}>いいね {parentPost.likes_count}</span>　リプライ {parentPost.replys_count}
                     </div>
                 </div>
             )}
