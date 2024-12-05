@@ -67,6 +67,10 @@ const PostDetail: React.FC = () => {
         navigate(`/posts/${replyId}`);
     };
 
+    const handleCreateReplyClick = () => {
+        navigate(`/createreply/${id}`);
+    };
+
     return (
         <div>
             <h2>投稿詳細</h2>
@@ -82,6 +86,12 @@ const PostDetail: React.FC = () => {
                 <h3>{post.user_name}</h3>
                 <p>{post.content}</p>
                 <p><small>{new Date(post.created_at).toLocaleString()}</small></p>
+                <button 
+                    onClick={handleCreateReplyClick} 
+                    className="create-reply-button"
+                >
+                    リプライ
+                </button>
             </div>
             <h3>リプライ</h3>
             {replies && replies.length > 0 ? (

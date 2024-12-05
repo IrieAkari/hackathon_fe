@@ -7,6 +7,7 @@ import TopPage from './components/TopPage';
 import Mypage from './components/Mypage';
 import CreatePost from './components/CreatePost';
 import PostDetail from './components/PostDetail';
+import CreateReply from './components/CreateReply';
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
             <Route path="/mypage" element={<Mypage />} />
             <Route path="/createpost" element={<CreatePost />} />
             <Route path="/posts/:id" element={<PostDetail />} />
+            <Route path="/createreply/:parentId" element={<CreateReply />} />
           </Routes>
         </header>
       </div>
