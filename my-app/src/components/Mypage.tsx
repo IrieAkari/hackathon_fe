@@ -72,38 +72,53 @@ const Mypage: React.FC = () => {
             <h1>{name}</h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
-                {posts.map(post => (
-                    <div 
-                        key={post.id} 
-                        style={{ 
-                            border: '1px solid #ccc', 
-                            padding: '20px', 
-                            margin: '10px 0', 
-                            width: '800px',
-                            cursor: 'pointer',
-                            position: 'relative'
-                        }}
-                        onClick={() => handlePostClick(post.id)}
-                    >
-                        {post.parent_id && (
-                            <span style={{ 
-                                position: 'absolute', 
-                                top: '10px', 
-                                right: '10px', 
-                                color: 'yellow', 
-                                fontWeight: 'bold' 
-                            }}>
-                                リプライ
-                            </span>
-                        )}
-                        <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
-                        <p>{post.content}</p>
-                        <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-                            <span style={{ color: isLiked(post.id) ? 'pink' : 'inherit' }}>いいね {post.likes_count}</span>　リプライ {post.replys_count}
+                {Array.isArray(posts) && posts.length > 0 ? (
+                    posts.map((post) => (
+                        <div
+                            key={post.id}
+                            style={{
+                                border: '1px solid #ccc',
+                                padding: '20px',
+                                margin: '10px 0',
+                                width: '800px',
+                                cursor: 'pointer',
+                                position: 'relative',
+                            }}
+                            onClick={() => handlePostClick(post.id)}
+                        >
+                            {post.parent_id && (
+                                <span
+                                    style={{
+                                        position: 'absolute',
+                                        top: '10px',
+                                        right: '10px',
+                                        color: 'yellow',
+                                        fontWeight: 'bold',
+                                    }}
+                                >
+                                    リプライ
+                                </span>
+                            )}
+                            <h3>
+                                {post.user_name}{' '}
+                                <span style={{ fontSize: '0.8em', color: '#888' }}>
+                                    {new Date(post.created_at).toLocaleString()}
+                                </span>
+                            </h3>
+                            <p>{post.content}</p>
+                            <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
+                                <span style={{ color: isLiked(post.id) ? 'pink' : 'inherit' }}>
+                                    いいね {post.likes_count}
+                                </span>
+                                　リプライ {post.replys_count}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                ) : (
+                    <p>投稿がありません。</p>
+                )}
             </div>
+
             <div style={{ position: 'fixed', bottom: 10, left: 10 }}>
                 <Link to="/top" style={{ color: 'white', marginRight: '10px' }}>ホーム</Link>
             </div>
