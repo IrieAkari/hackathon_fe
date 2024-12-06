@@ -1,7 +1,7 @@
 import { Post } from '../types';
 import { getAuth } from 'firebase/auth';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export const toggleLike = async (
     postId: string,

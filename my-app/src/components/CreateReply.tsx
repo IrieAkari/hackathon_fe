@@ -5,7 +5,7 @@ import { fetchParentPost } from '../utils/fetchParentPost';
 import { fetchLikedPosts } from '../utils/fetchLikedPosts';
 import { Post } from '../types';
 
-const API_BASE_URL = 'https://hackathon-be-509846548823.us-central1.run.app';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const CreateReply: React.FC = () => {
     const { parentId } = useParams<{ parentId: string }>();

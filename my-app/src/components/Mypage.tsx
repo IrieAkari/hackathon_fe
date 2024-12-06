@@ -8,7 +8,7 @@ import { fetchLikedPosts } from '../utils/fetchLikedPosts';
 import { Post } from '../types';
 
 //import { API_BASE_URL } from '../config';
-const API_BASE_URL = 'https://hackathon-be-509846548823.us-central1.run.app';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Mypage: React.FC = () => {
     const [name, setName] = useState<string>('');

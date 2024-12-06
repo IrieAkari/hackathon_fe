@@ -1,7 +1,7 @@
 import { Post } from '../types';
 import { getAuth } from 'firebase/auth';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export const fetchUserPosts = async (setPosts: React.Dispatch<React.SetStateAction<Post[]>>, setError: React.Dispatch<React.SetStateAction<string>>) => {
     const auth = getAuth();

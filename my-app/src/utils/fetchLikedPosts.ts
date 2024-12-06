@@ -1,6 +1,6 @@
 import { getAuth } from 'firebase/auth';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export const fetchLikedPosts = async (setLikedPosts: React.Dispatch<React.SetStateAction<Set<string>>>, setError: React.Dispatch<React.SetStateAction<string>>) => {
     const auth = getAuth();
