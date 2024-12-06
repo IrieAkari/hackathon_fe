@@ -13,6 +13,10 @@ const SignUpForm: React.FC = () => {
     const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
+        if (name.length > 15) {
+            setError('ユーザー名は15文字以内にしてください。');
+            return;
+        }
         try {
             const signInMethods = await fetchSignInMethodsForEmail(fireAuth, email);
             if (signInMethods.length > 0) {
@@ -22,8 +26,10 @@ const SignUpForm: React.FC = () => {
                 alert('アカウントが作成されました: ' + email);
 
                 // バックエンドにユーザー情報を送信
-                //const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/register`, {
-                    const response = await fetch(`${API_BASE_URL}/register`, {
+
+                //const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/userregister`, {
+                const response = await fetch(`${API_BASE_URL}/userregister`, {
+
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -51,6 +57,7 @@ const SignUpForm: React.FC = () => {
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                        maxLength={15} // ユーザー名の最大文字数を15に設定
                     />
                 </div>
                 <div>
