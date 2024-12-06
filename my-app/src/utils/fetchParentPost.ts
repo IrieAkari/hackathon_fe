@@ -1,6 +1,6 @@
 import { Post } from '../types';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://hackathon-be-509846548823.us-central1.run.app';
 
 export const fetchParentPost = async (parentId: string, setParentPost: React.Dispatch<React.SetStateAction<Post | null>>, setError: React.Dispatch<React.SetStateAction<string>>) => {
     try {

@@ -1,7 +1,7 @@
 import { Post } from '../types';
 import { getAuth } from 'firebase/auth';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://hackathon-be-509846548823.us-central1.run.app';
 
 export const toggleLike = async (
     postId: string,
