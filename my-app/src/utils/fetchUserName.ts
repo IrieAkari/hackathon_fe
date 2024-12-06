@@ -1,6 +1,6 @@
 import { getAuth } from 'firebase/auth';
 
-const API_BASE_URL = 'https://hackathon-be-509846548823.us-central1.run.app';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export const fetchUserName = async (setName: React.Dispatch<React.SetStateAction<string>>, setError: React.Dispatch<React.SetStateAction<string>>) => {
     const auth = getAuth();
