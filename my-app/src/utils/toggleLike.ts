@@ -1,5 +1,5 @@
-import { getAuth } from 'firebase/auth';
 import { Post } from '../types';
+import { getAuth } from 'firebase/auth';
 
 const API_BASE_URL = 'http://localhost:8000';
 
