@@ -14,7 +14,7 @@ const Sidebar: React.FC = () => {
     };
 
     const drawerContent = (
-        <Box sx={{ width: 250, bgcolor: '#2d445d', height: '100%', color: 'white' }}>
+        <Box sx={{ width: 250, bgcolor: '#2d445d', height: '100%', color: 'white', overflow: 'hidden' }}>
             <Toolbar>
                 <Typography variant="h6" noWrap>
                     Hackathon X
@@ -61,7 +61,7 @@ const Sidebar: React.FC = () => {
                 ModalProps={{ keepMounted: true }} // モバイルパフォーマンスの最適化
                 sx={{
                     display: { xs: 'block', sm: 'none' },
-                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250 },
+                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250, overflow: 'hidden' },
                 }}
             >
                 {drawerContent}
@@ -71,7 +71,7 @@ const Sidebar: React.FC = () => {
                 variant="permanent"
                 sx={{
                     display: { xs: 'none', sm: 'block' },
-                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250 },
+                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250, overflow: 'hidden' },
                 }}
                 open
             >

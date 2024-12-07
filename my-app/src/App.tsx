@@ -24,7 +24,7 @@ const App: React.FC = () => {
               element={
                 <div style={{ display: 'flex' }}>
                   <Sidebar />
-                  <div style={{ flexGrow: 1, padding: '20px' }}>
+                  <div style={{ flexGrow: 1, padding: '20px', marginLeft: '250px' }}>
                     <Routes>
                       <Route path="/top" element={<TopPage />} />
                       <Route path="/mypage" element={<Mypage />} />
