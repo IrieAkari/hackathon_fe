@@ -4,17 +4,31 @@ import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import AddIcon from '@mui/icons-material/Add';
-import { Link } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Link, useNavigate } from 'react-router-dom';
+import { getAuth, signOut } from 'firebase/auth';
 
 const Sidebar: React.FC = () => {
     const [mobileOpen, setMobileOpen] = React.useState(false);
+    const navigate = useNavigate();
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
+    const handleLogout = () => {
+        signOut(getAuth())
+            .then(() => {
+                alert('ログアウトしました');
+                navigate('/');
+            })
+            .catch((error) => {
+                alert(error.message);
+            });
+    };
+
     const drawerContent = (
-        <Box sx={{ width: 250, bgcolor: '#2d445d', height: '100%', color: 'white', overflow: 'hidden' }}>
+        <Box sx={{ width: 250, bgcolor: '#2d445d', height: '100%', color: 'white' }}>
             <Toolbar>
                 <Typography variant="h6" noWrap>
                     Hackathon X
@@ -39,6 +53,12 @@ const Sidebar: React.FC = () => {
                     </ListItemIcon>
                     <ListItemText primary="新規投稿" />
                 </ListItem>
+                <ListItem button onClick={handleLogout}>
+                    <ListItemIcon>
+                        <LogoutIcon sx={{ color: 'white' }} />
+                    </ListItemIcon>
+                    <ListItemText primary="ログアウト" />
+                </ListItem>
             </List>
         </Box>
     );
@@ -61,7 +81,7 @@ const Sidebar: React.FC = () => {
                 ModalProps={{ keepMounted: true }} // モバイルパフォーマンスの最適化
                 sx={{
                     display: { xs: 'block', sm: 'none' },
-                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250, overflow: 'hidden' },
+                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250 },
                 }}
             >
                 {drawerContent}
@@ -71,7 +91,7 @@ const Sidebar: React.FC = () => {
                 variant="permanent"
                 sx={{
                     display: { xs: 'none', sm: 'block' },
-                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250, overflow: 'hidden' },
+                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250 },
                 }}
                 open
             >
