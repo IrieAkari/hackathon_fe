@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
-import { fireAuth } from '../firebase';
+import { fireAuth } from '../../firebase';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const SignUpForm: React.FC = () => {
@@ -10,6 +10,11 @@ const SignUpForm: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
 
+    /**
+     * サインアップフォームの送信を処理する関数。
+     * 
+     * @param e - フォームイベント。
+     */
     const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
@@ -26,10 +31,7 @@ const SignUpForm: React.FC = () => {
                 alert('アカウントが作成されました: ' + email);
 
                 // バックエンドにユーザー情報を送信
-
-                //const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/userregister`, {
                 const response = await fetch(`${API_BASE_URL}/userregister`, {
-
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

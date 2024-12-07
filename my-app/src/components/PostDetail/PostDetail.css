@@ -1,0 +1,76 @@
+/* 投稿コンテナのスタイル */
+.post-container {
+    border: 2px solid #fff; /* 白い枠線 */
+    padding: 20px; /* 内側の余白 */
+    margin: 10px 0; /* 上下の外側の余白 */
+    width: 800px; /* 幅 */
+    position: relative; /* 相対位置 */
+}
+
+/* リプライコンテナのスタイル */
+.reply-container {
+    border: 2px solid #fff; /* 白い枠線 */
+    padding: 20px; /* 内側の余白 */
+    margin: 10px 0; /* 上下の外側の余白 */
+    width: 800px; /* 幅 */
+    position: relative; /* 相対位置 */
+}
+
+/* リプライラベルのスタイル */
+.reply-label {
+    position: absolute; /* 絶対位置 */
+    top: 10px; /* 上からの距離 */
+    right: 10px; /* 右からの距離 */
+    color: yellow; /* 文字色 */
+    font-weight: bold; /* 太字 */
+}
+
+/* 親投稿ボタンのスタイル */
+.parent-post-button {
+    position: absolute; /* 絶対位置 */
+    top: 10px; /* 上からの距離 */
+    left: 10px; /* 左からの距離 */
+    color: yellow; /* 文字色 */
+    background: none; /* 背景なし */
+    border: none; /* 枠線なし */
+    cursor: pointer; /* カーソルをポインタに変更 */
+    font-weight: bold; /* 太字 */
+}
+
+/* 固定位置のスタイル（左下） */
+.fixed-bottom-left {
+    position: fixed; /* 固定位置 */
+    bottom: 10px; /* 下からの距離 */
+    left: 10px; /* 左からの距離 */
+}
+
+/* 固定位置のスタイル（右下） */
+.fixed-bottom-right {
+    position: fixed; /* 固定位置 */
+    bottom: 10px; /* 下からの距離 */
+    right: 10px; /* 右からの距離 */
+}
+
+.tooltip {
+    position: absolute;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+    padding: 5px; /* パディングを小さく */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-size: 0.4em; /* フォントサイズを小さく */
+    max-width: 300px; /* 最大幅を設定 */
+    white-space: normal; /* テキストを改行 */
+    word-wrap: break-word; /* 長い単語を改行 */
+}
+
+.warning-text {
+    position: absolute;
+    top: 10px; /* 右上に配置 */
+    right: 10px; /* 右上に配置 */
+    color: red;
+    font-weight: bold;
+    font-size: 0.8em; /* フォントサイズを小さく */
+}

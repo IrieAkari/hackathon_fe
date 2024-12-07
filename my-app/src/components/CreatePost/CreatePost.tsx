@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { fireAuth } from '../firebase';
+import { fireAuth } from '../../firebase';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -9,8 +9,14 @@ const CreatePost: React.FC = () => {
     const [error, setError] = useState<string>('');
     const navigate = useNavigate();
 
+    /**
+     * フォームの送信を処理する関数。
+     * 
+     * @param e - フォームイベント。
+     */
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        // 投稿内容が200文字を超える場合はエラーメッセージをセット
         if (content.length > 200) {
             setError('投稿内容は200文字以内にしてください');
             return;
@@ -18,6 +24,7 @@ const CreatePost: React.FC = () => {
         const user = fireAuth.currentUser;
         if (user) {
             try {
+                // APIエンドポイントにリクエストを送信して、投稿を作成
                 const response = await fetch(`${API_BASE_URL}/postcreate`, {
                     method: 'POST',
                     headers: {
@@ -31,6 +38,7 @@ const CreatePost: React.FC = () => {
                 alert('投稿が作成されました');
                 navigate('/mypage'); // 投稿成功後にMypageに遷移
             } catch (error: any) {
+                // エラーメッセージをセット
                 setError(error.message);
             }
         } else {
@@ -63,7 +71,7 @@ const CreatePost: React.FC = () => {
                 <Link to="/top" style={{ color: 'white', marginRight: '10px' }}>ホーム</Link>
             </div>
             <div style={{ position: 'fixed', bottom: 10, right: 10 }}>
-                <Link to="/mypage" style={{ color: 'white' }}>マイページ</Link>
+                <Link to="/mypage" style={{ color: 'white', marginRight: '10px' }}>マイページ</Link>
             </div>
         </div>
     );
