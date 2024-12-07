@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import './PostDetail.css';
-import { fetchPost } from '../utils/fetchPost';
-import { fetchReplies } from '../utils/fetchReplies';
-import { fetchLikedPosts } from '../utils/fetchLikedPosts';
-import { handleUserNameClick } from '../utils/handleUserNameClick';
-import { Post } from '../types';
+import { fetchPost } from '../../utils/API/fetchPost';
+import { fetchReplies } from '../../utils/API/fetchReplies';
+import { fetchLikedPosts } from '../../utils/API/fetchLikedPosts';
+import { handleUserNameClick } from '../../utils/auth/handleUserNameClick';
+import { showTooltip, hideTooltip } from '../../utils/ui/tooltipUtils'; // 新しい関数をインポート
+import { Post } from '../../types';
 
 const PostDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -13,6 +14,8 @@ const PostDetail: React.FC = () => {
     const [replies, setReplies] = useState<Post[]>([]);
     const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set<string>());
     const [error, setError] = useState<string>('');
+    const [tooltip, setTooltip] = useState<string | null>(null); // ツールチップの状態を追加
+    const [tooltipPosition, setTooltipPosition] = useState<{ top: number, left: number } | null>(null); // ツールチップの位置を追加
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,7 +41,11 @@ const PostDetail: React.FC = () => {
      * @param parentId - 親投稿のID。
      */
     const handleParentPostClick = (parentId: string) => {
-        navigate(`/posts/${parentId}`);
+        if (post?.is_parent_deleted) {
+            alert('親投稿は削除されました');
+        } else {
+            navigate(`/posts/${parentId}`);
+        }
     };
 
     /**
@@ -92,6 +99,15 @@ const PostDetail: React.FC = () => {
                 <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
                     <span style={{ color: isLiked(post.id) ? 'pink' : 'inherit' }}>いいね {post.likes_count}</span>　リプライ {post.replys_count}
                 </div>
+                {post.trust_score >= 0 && post.trust_score <= 49 && (
+                    <span 
+                        className="warning-text"
+                        onMouseEnter={(e) => showTooltip(post.trust_description || '', e, setTooltip, setTooltipPosition)} // 追加
+                        onMouseLeave={() => hideTooltip(setTooltip, setTooltipPosition)} // 追加
+                    >
+                        注意：信頼度の低い投稿
+                    </span>
+                )}
                 <button 
                     onClick={handleCreateReplyClick} 
                     className="create-reply-button"
@@ -124,10 +140,24 @@ const PostDetail: React.FC = () => {
                         <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
                             <span style={{ color: isLiked(reply.id) ? 'pink' : 'inherit' }}>いいね {reply.likes_count}</span>　リプライ {reply.replys_count}
                         </div>
+                        {reply.trust_score >= 0 && reply.trust_score <= 49 && (
+                            <span 
+                                className="warning-text"
+                                onMouseEnter={(e) => showTooltip(reply.trust_description || '', e, setTooltip, setTooltipPosition)} // 追加
+                                onMouseLeave={() => hideTooltip(setTooltip, setTooltipPosition)} // 追加
+                            >
+                                注意：信頼度の低い投稿
+                            </span>
+                        )}
                     </div>
                 ))
             ) : (
                 <p>リプライはありません</p>
+            )}
+            {tooltip && tooltipPosition && (
+                <div className="tooltip" style={{ top: tooltipPosition.top, left: tooltipPosition.left }}>
+                    {tooltip}
+                </div>
             )}
             <div className="fixed-bottom-left">
                 <Link to="/top" style={{ color: 'white', marginRight: '10px' }}>ホーム</Link>

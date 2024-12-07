@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { fetchPosts } from '../utils/fetchPosts';
-import { fetchLikedPosts } from '../utils/fetchLikedPosts';
-import { toggleLike } from '../utils/toggleLike';
-import { handleUserNameClick } from '../utils/handleUserNameClick';
-import { Post } from '../types';
+import { fetchPosts } from '../../utils/API/fetchPosts';
+import { fetchLikedPosts } from '../../utils/API/fetchLikedPosts';
+import { toggleLike } from '../../utils/API/toggleLike';
+import { handleUserNameClick } from '../../utils/auth/handleUserNameClick';
+import { showTooltip, hideTooltip } from '../../utils/ui/tooltipUtils'; // 新しい関数をインポート
+import { Post } from '../../types';
+import './TopPage.css'; // カスタムツールチップのスタイルを追加
 
 const TopPage: React.FC = () => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set<string>());
     const [error, setError] = useState<string>('');
+    const [tooltip, setTooltip] = useState<string | null>(null); // ツールチップの状態を追加
+    const [tooltipPosition, setTooltipPosition] = useState<{ top: number, left: number } | null>(null); // ツールチップの位置を追加
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -58,7 +62,8 @@ const TopPage: React.FC = () => {
                             padding: '20px', 
                             margin: '10px 0', 
                             width: '800px',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
+                            position: 'relative' // 追加
                         }}
                         onClick={() => handlePostClick(post.id)}
                     >
@@ -88,9 +93,23 @@ const TopPage: React.FC = () => {
                                 いいね {post.likes_count}
                             </span>　リプライ {post.replys_count}
                         </div>
+                        {post.trust_score >= 0 && post.trust_score <= 49 && (
+                            <span 
+                                className="warning-text"
+                                onMouseEnter={(e) => showTooltip(post.trust_description || '', e, setTooltip, setTooltipPosition)} // 追加
+                                onMouseLeave={() => hideTooltip(setTooltip, setTooltipPosition)} // 追加
+                            >
+                                注意：信頼度の低い投稿
+                            </span>
+                        )}
                     </div>
                 ))}
             </div>
+            {tooltip && tooltipPosition && (
+                <div className="tooltip" style={{ top: tooltipPosition.top, left: tooltipPosition.left }}>
+                    {tooltip}
+                </div>
+            )}
             <div style={{ position: 'fixed', bottom: 10, right: 10 }}>
                 <Link to="/createpost" style={{ color: 'white', marginRight: '10px' }}>新規投稿</Link>
                 <br />

@@ -1,0 +1,40 @@
+.tooltip {
+    position: absolute;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+    padding: 5px; /* パディングを小さく */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-size: 0.4em; /* フォントサイズを小さく */
+    max-width: 300px; /* 最大幅を設定 */
+    white-space: normal; /* テキストを改行 */
+    word-wrap: break-word; /* 長い単語を改行 */
+}
+
+.warning-text {
+    position: absolute;
+    top: 10px; /* 右上に配置 */
+    right: 10px; /* 右上に配置 */
+    color: red;
+    font-weight: bold;
+    font-size: 0.8em; /* フォントサイズを小さく */
+}
+
+.post-container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 10px 0;
+    width: 800px;
+    cursor: pointer;
+    position: relative;
+}
+
+.reply-label {
+    position: absolute !important;
+    bottom: 10px !important;
+    right: 10px !important;
+    color: yellow !important;
+    font-weight: bold !important;
+}

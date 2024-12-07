@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { fireAuth } from '../firebase';
-import { fetchParentPost } from '../utils/fetchParentPost';
-import { fetchLikedPosts } from '../utils/fetchLikedPosts';
-import { Post } from '../types';
+import { fireAuth } from '../../firebase';
+import { fetchParentPost } from '../../utils/API/fetchParentPost';
+import { fetchLikedPosts } from '../../utils/API/fetchLikedPosts';
+import { showTooltip, hideTooltip } from '../../utils/ui/tooltipUtils'; // 新しい関数をインポート
+import { Post } from '../../types';
+import './CreateReply.css'; // カスタムツールチップのスタイルを追加
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -13,6 +15,8 @@ const CreateReply: React.FC = () => {
     const [error, setError] = useState<string>('');
     const [parentPost, setParentPost] = useState<Post | null>(null);
     const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set<string>());
+    const [tooltip, setTooltip] = useState<string | null>(null); // ツールチップの状態を追加
+    const [tooltipPosition, setTooltipPosition] = useState<{ top: number, left: number } | null>(null); // ツールチップの位置を追加
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -80,6 +84,15 @@ const CreateReply: React.FC = () => {
                     <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
                         <span style={{ color: isLiked(parentPost.id) ? 'pink' : 'inherit' }}>いいね {parentPost.likes_count}</span>　リプライ {parentPost.replys_count}
                     </div>
+                    {parentPost.trust_score >= 0 && parentPost.trust_score <= 49 && (
+                        <span 
+                            className="warning-text"
+                            onMouseEnter={(e) => showTooltip(parentPost.trust_description || '', e, setTooltip, setTooltipPosition)} // 追加
+                            onMouseLeave={() => hideTooltip(setTooltip, setTooltipPosition)} // 追加
+                        >
+                            注意：信頼度の低い投稿
+                        </span>
+                    )}
                 </div>
             )}
             <form onSubmit={handleSubmit}>
@@ -101,6 +114,11 @@ const CreateReply: React.FC = () => {
                 <button type="submit">リプライ</button>
             </form>
             <button onClick={() => navigate(`/posts/${parentId}`)} style={{ marginTop: '10px' }}>戻る</button>
+            {tooltip && tooltipPosition && (
+                <div className="tooltip" style={{ top: tooltipPosition.top, left: tooltipPosition.left }}>
+                    {tooltip}
+                </div>
+            )}
             <div style={{ position: 'fixed', bottom: 10, left: 10 }}>
                 <Link to="/top" style={{ color: 'white', marginRight: '10px' }}>ホーム</Link>
             </div>
