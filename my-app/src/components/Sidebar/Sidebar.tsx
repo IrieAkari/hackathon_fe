@@ -35,25 +35,26 @@ const Sidebar: React.FC = () => {
                 </Typography>
             </Toolbar>
             <List>
-                <ListItem button component={Link} to="/top">
+
+                <ListItem component={Link} to="/top">
                     <ListItemIcon>
                         <HomeIcon sx={{ color: 'white' }} />
                     </ListItemIcon>
-                    <ListItemText primary="トップページ" />
+                    <ListItemText primary="ホーム" />
                 </ListItem>
-                <ListItem button component={Link} to="/mypage">
+                <ListItem component={Link} to="/mypage">
                     <ListItemIcon>
                         <PersonIcon sx={{ color: 'white' }} />
                     </ListItemIcon>
                     <ListItemText primary="マイページ" />
                 </ListItem>
-                <ListItem button component={Link} to="/createpost">
+                <ListItem component={Link} to="/createpost">
                     <ListItemIcon>
                         <AddIcon sx={{ color: 'white' }} />
                     </ListItemIcon>
                     <ListItemText primary="新規投稿" />
                 </ListItem>
-                <ListItem button onClick={handleLogout}>
+                <ListItem component="div" onClick={handleLogout}>
                     <ListItemIcon>
                         <LogoutIcon sx={{ color: 'white' }} />
                     </ListItemIcon>
