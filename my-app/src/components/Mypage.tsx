@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import { getAuth, signOut, deleteUser } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchUserName } from '../utils/fetchUserName';
@@ -23,6 +22,9 @@ const Mypage: React.FC = () => {
         fetchLikedPosts(setLikedPosts, setError);
     }, []);
 
+    /**
+     * ログアウトを処理する関数。
+     */
     const handleLogout = () => {
         signOut(getAuth())
             .then(() => {
@@ -34,6 +36,9 @@ const Mypage: React.FC = () => {
             });
     };
 
+    /**
+     * アカウント削除を処理する関数。
+     */
     const handleDeleteAccount = async () => {
         const user = getAuth().currentUser;
         if (user) {
@@ -59,10 +64,21 @@ const Mypage: React.FC = () => {
         }
     };
 
+    /**
+     * 投稿をクリックしたときの処理。
+     * 
+     * @param id - 投稿のID。
+     */
     const handlePostClick = (id: string) => {
         navigate(`/posts/${id}`);
     };
 
+    /**
+     * 投稿が「いいね」されているかどうかを確認する関数。
+     * 
+     * @param postId - 投稿のID。
+     * @returns 投稿が「いいね」されている場合は true、それ以外の場合は false。
+     */
     const isLiked = (postId: string) => likedPosts.has(postId);
 
     return (

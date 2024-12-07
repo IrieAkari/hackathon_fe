@@ -4,6 +4,7 @@ import './PostDetail.css';
 import { fetchPost } from '../utils/fetchPost';
 import { fetchReplies } from '../utils/fetchReplies';
 import { fetchLikedPosts } from '../utils/fetchLikedPosts';
+import { handleUserNameClick } from '../utils/handleUserNameClick';
 import { Post } from '../types';
 
 const PostDetail: React.FC = () => {
@@ -16,6 +17,7 @@ const PostDetail: React.FC = () => {
 
     useEffect(() => {
         if (id) {
+            // 投稿、リプライ、および「いいね」した投稿を取得
             fetchPost(id, setPost, setError);
             fetchReplies(id, setReplies, setError);
             fetchLikedPosts(setLikedPosts, setError);
@@ -30,18 +32,37 @@ const PostDetail: React.FC = () => {
         return <p>Loading...</p>;
     }
 
+    /**
+     * 親投稿をクリックしたときの処理。
+     * 
+     * @param parentId - 親投稿のID。
+     */
     const handleParentPostClick = (parentId: string) => {
         navigate(`/posts/${parentId}`);
     };
 
+    /**
+     * リプライをクリックしたときの処理。
+     * 
+     * @param replyId - リプライのID。
+     */
     const handleReplyClick = (replyId: string) => {
         navigate(`/posts/${replyId}`);
     };
 
+    /**
+     * リプライ作成ボタンをクリックしたときの処理。
+     */
     const handleCreateReplyClick = () => {
         navigate(`/createreply/${id}`);
     };
 
+    /**
+     * 投稿が「いいね」されているかどうかを確認する関数。
+     * 
+     * @param postId - 投稿のID。
+     * @returns 投稿が「いいね」されている場合は true、それ以外の場合は false。
+     */
     const isLiked = (postId: string) => likedPosts.has(postId);
 
     return (
@@ -56,7 +77,17 @@ const PostDetail: React.FC = () => {
                         親投稿
                     </button>
                 )}
-                <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
+                <h3>
+                    <span 
+                        style={{ cursor: 'pointer', color: 'blue' }} 
+                        onClick={() => handleUserNameClick(post.user_id, setError, navigate)}
+                    >
+                        {post.user_name}
+                    </span> 
+                    <span style={{ fontSize: '0.8em', color: '#888' }}>
+                        {new Date(post.created_at).toLocaleString()}
+                    </span>
+                </h3>
                 <p>{post.content}</p>
                 <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
                     <span style={{ color: isLiked(post.id) ? 'pink' : 'inherit' }}>いいね {post.likes_count}</span>　リプライ {post.replys_count}
@@ -78,7 +109,17 @@ const PostDetail: React.FC = () => {
                         style={{ cursor: 'pointer' }}
                     >
                         <span className="reply-label">リプライ</span>
-                        <h3>{reply.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(reply.created_at).toLocaleString()}</span></h3>
+                        <h3>
+                            <span 
+                                style={{ cursor: 'pointer', color: 'blue' }} 
+                                onClick={() => handleUserNameClick(reply.user_id, setError, navigate)}
+                            >
+                                {reply.user_name}
+                            </span> 
+                            <span style={{ fontSize: '0.8em', color: '#888' }}>
+                                {new Date(reply.created_at).toLocaleString()}
+                            </span>
+                        </h3>
                         <p>{reply.content}</p>
                         <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
                             <span style={{ color: isLiked(reply.id) ? 'pink' : 'inherit' }}>いいね {reply.likes_count}</span>　リプライ {reply.replys_count}

@@ -17,13 +17,20 @@ const CreateReply: React.FC = () => {
 
     useEffect(() => {
         if (parentId) {
+            // 親投稿とユーザーが「いいね」した投稿を取得
             fetchParentPost(parentId, setParentPost, setError);
             fetchLikedPosts(setLikedPosts, setError);
         }
     }, [parentId]);
 
+    /**
+     * フォームの送信を処理する関数。
+     * 
+     * @param e - フォームイベント。
+     */
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        // リプライ内容が200文字を超える場合はエラーメッセージをセット
         if (content.length > 200) {
             setError('リプライ内容は200文字以内にしてください');
             return;
@@ -31,6 +38,7 @@ const CreateReply: React.FC = () => {
         const user = fireAuth.currentUser;
         if (user) {
             try {
+                // APIエンドポイントにリクエストを送信して、リプライを作成
                 const response = await fetch(`${API_BASE_URL}/replycreate`, {
                     method: 'POST',
                     headers: {
@@ -44,6 +52,7 @@ const CreateReply: React.FC = () => {
                 alert('リプライが作成されました');
                 navigate(`/posts/${parentId}`); // リプライ成功後に親投稿の投稿詳細ページに遷移
             } catch (error: any) {
+                // エラーメッセージをセット
                 setError(error.message);
             }
         } else {

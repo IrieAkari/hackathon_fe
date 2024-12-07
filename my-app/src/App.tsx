@@ -8,6 +8,7 @@ import Mypage from './components/Mypage';
 import CreatePost from './components/CreatePost';
 import PostDetail from './components/PostDetail';
 import CreateReply from './components/CreateReply';
+import UserPage from './components/UserPage'; // 新しいコンポーネントをインポート
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
             <Route path="/createpost" element={<CreatePost />} />
             <Route path="/posts/:id" element={<PostDetail />} />
             <Route path="/createreply/:parentId" element={<CreateReply />} />
+            <Route path="/user/:userId" element={<UserPage />} /> {/* 新しいルートを追加 */}
           </Routes>
         </header>
       </div>

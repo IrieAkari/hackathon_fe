@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { fetchPosts } from '../utils/fetchPosts';
 import { fetchLikedPosts } from '../utils/fetchLikedPosts';
 import { toggleLike } from '../utils/toggleLike';
+import { handleUserNameClick } from '../utils/handleUserNameClick';
 import { Post } from '../types';
 
 const TopPage: React.FC = () => {
@@ -12,19 +13,36 @@ const TopPage: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        // 投稿と「いいね」した投稿を取得
         fetchPosts(setPosts, setError);
         fetchLikedPosts(setLikedPosts, setError);
     }, []);
 
+    /**
+     * 投稿をクリックしたときの処理。
+     * 
+     * @param id - 投稿のID。
+     */
     const handlePostClick = (id: string) => {
         navigate(`/posts/${id}`);
     };
 
+    /**
+     * 「いいね」ボタンをクリックしたときの処理。
+     * 
+     * @param postId - 投稿のID。
+     */
     const handleLikeClick = (postId: string) => {
         const isLiked = likedPosts.has(postId);
         toggleLike(postId, isLiked, setLikedPosts, setPosts, setError);
     };
 
+    /**
+     * 投稿が「いいね」されているかどうかを確認する関数。
+     * 
+     * @param postId - 投稿のID。
+     * @returns 投稿が「いいね」されている場合は true、それ以外の場合は false。
+     */
     const isLiked = (postId: string) => likedPosts.has(postId);
 
     return (
@@ -44,7 +62,20 @@ const TopPage: React.FC = () => {
                         }}
                         onClick={() => handlePostClick(post.id)}
                     >
-                        <h3>{post.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(post.created_at).toLocaleString()}</span></h3>
+                        <h3>
+                            <span 
+                                style={{ cursor: 'pointer', color: 'blue' }} 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleUserNameClick(post.user_id, setError, navigate);
+                                }}
+                            >
+                                {post.user_name}
+                            </span> 
+                            <span style={{ fontSize: '0.8em', color: '#888' }}>
+                                {new Date(post.created_at).toLocaleString()}
+                            </span>
+                        </h3>
                         <p>{post.content}</p>
                         <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
                             <span 

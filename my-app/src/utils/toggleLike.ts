@@ -3,6 +3,15 @@ import { getAuth } from 'firebase/auth';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
+/**
+ * 投稿の「いいね」を切り替える関数。
+ * 
+ * @param postId - 「いいね」をトグルする投稿のID。
+ * @param isLiked - 現在の「いいね」状態。
+ * @param setLikedPosts - ユーザーが「いいね」した投稿のIDをセットするための関数。
+ * @param setPosts - 投稿のリストをセットするための関数。
+ * @param setError - エラーメッセージをセットするための関数。
+ */
 export const toggleLike = async (
     postId: string,
     isLiked: boolean,
@@ -44,6 +53,7 @@ export const toggleLike = async (
                 }
             }
         } catch (error: any) {
+            // エラーメッセージをセット
             setError(error.message);
         }
     }
