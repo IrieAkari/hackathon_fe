@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAuth, signOut, deleteUser } from 'firebase/auth';
+import { getAuth, deleteUser } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchUserName } from '../../utils/API/fetchUserName';
 import { fetchUserPosts } from '../../utils/API/fetchUserPosts';
@@ -25,17 +25,6 @@ const Mypage: React.FC = () => {
         fetchUserPosts(setPosts, setError);
         fetchLikedPosts(setLikedPosts, setError);
     }, []);
-
-    const handleLogout = () => {
-        signOut(getAuth())
-            .then(() => {
-                alert('ログアウトしました');
-                navigate('/');
-            })
-            .catch((error) => {
-                alert(error.message);
-            });
-    };
 
     const handleDeleteAccount = async () => {
         const user = getAuth().currentUser;
@@ -72,9 +61,6 @@ const Mypage: React.FC = () => {
     return (
         <div>
             <div style={{ position: 'fixed', top: 10, right: 10 }}>
-                <button onClick={handleLogout} style={{ marginRight: '10px' }}>
-                    Logout
-                </button>
                 <button onClick={handleDeleteAccount}>Delete Account</button>
             </div>
             <h1>{name}</h1>
