@@ -1,7 +1,7 @@
 .tooltip {
     position: absolute;
-    background-color: #fff;
-    color: #000;
+    background-color: #333;
+    color: #fff;
     border: 1px solid #ccc;
     padding: 5px; /* パディングを小さく */
     border-radius: 5px;
@@ -20,4 +20,34 @@
     color: red;
     font-weight: bold;
     font-size: 0.8em; /* フォントサイズを小さく */
+}
+
+.top-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.post-container {
+    border: 1px solid #333;
+    padding: 20px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 800px;
+    min-width: 300px;
+    box-sizing: border-box;
+    word-wrap: break-word; /* 投稿内容を改行する */
+}
+
+.fixed-bottom-right {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+}
+
+.fixed-bottom-left {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
 }

@@ -50,21 +50,14 @@ const TopPage: React.FC = () => {
     const isLiked = (postId: string) => likedPosts.has(postId);
 
     return (
-        <div>
+        <div className="top-page">
             <h2>最新の投稿</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
                 {posts.map(post => (
                     <div 
                         key={post.id} 
-                        style={{ 
-                            border: '1px solid #ccc', 
-                            padding: '20px', 
-                            margin: '10px 0', 
-                            width: '800px',
-                            cursor: 'pointer',
-                            position: 'relative' // 追加
-                        }}
+                        className="post-container"
                         onClick={() => handlePostClick(post.id)}
                     >
                         <h3>
@@ -110,7 +103,7 @@ const TopPage: React.FC = () => {
                     {tooltip}
                 </div>
             )}
-            <div style={{ position: 'fixed', bottom: 10, right: 10 }}>
+            <div className="fixed-bottom-right">
                 <Link to="/createpost" style={{ color: 'white', marginRight: '10px' }}>新規投稿</Link>
                 <br />
                 <Link to="/mypage" style={{ color: 'white' }}>マイページ</Link>
