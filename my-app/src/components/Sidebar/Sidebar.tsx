@@ -5,8 +5,9 @@ import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import AddIcon from '@mui/icons-material/Add';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
+import './Sidebar.css';
 
 const Sidebar: React.FC = () => {
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -28,37 +29,36 @@ const Sidebar: React.FC = () => {
     };
 
     const drawerContent = (
-        <Box sx={{ width: 250, bgcolor: '#2d445d', height: '100%', color: 'white' }}>
-            <Toolbar>
+        <Box className="sidebar">
+            <Toolbar className="sidebar-toolbar">
                 <Typography variant="h6" noWrap>
                     Hackathon X
                 </Typography>
             </Toolbar>
-            <List>
-
-                <ListItem component={Link} to="/top">
-                    <ListItemIcon>
+            <List className="sidebar-list">
+                <ListItem disablePadding component={NavLink} to="/top" className="sidebar-list-item">
+                    <ListItemIcon className="sidebar-list-item-icon">
                         <HomeIcon sx={{ color: 'white' }} />
                     </ListItemIcon>
-                    <ListItemText primary="ホーム" />
+                    <ListItemText primary="ホーム" className="sidebar-list-item-text" />
                 </ListItem>
-                <ListItem component={Link} to="/mypage">
-                    <ListItemIcon>
+                <ListItem disablePadding component={NavLink} to="/mypage" className="sidebar-list-item">
+                    <ListItemIcon className="sidebar-list-item-icon">
                         <PersonIcon sx={{ color: 'white' }} />
                     </ListItemIcon>
-                    <ListItemText primary="マイページ" />
+                    <ListItemText primary="マイページ" className="sidebar-list-item-text" />
                 </ListItem>
-                <ListItem component={Link} to="/createpost">
-                    <ListItemIcon>
+                <ListItem disablePadding component={NavLink} to="/createpost" className="sidebar-list-item">
+                    <ListItemIcon className="sidebar-list-item-icon">
                         <AddIcon sx={{ color: 'white' }} />
                     </ListItemIcon>
-                    <ListItemText primary="新規投稿" />
+                    <ListItemText primary="新規投稿" className="sidebar-list-item-text" />
                 </ListItem>
-                <ListItem component="div" onClick={handleLogout}>
-                    <ListItemIcon>
+                <ListItem disablePadding component="div" onClick={handleLogout} className="sidebar-logout">
+                    <ListItemIcon className="sidebar-list-item-icon">
                         <LogoutIcon sx={{ color: 'white' }} />
                     </ListItemIcon>
-                    <ListItemText primary="ログアウト" />
+                    <ListItemText primary="ログアウト" className="sidebar-list-item-text" />
                 </ListItem>
             </List>
         </Box>
