@@ -135,10 +135,10 @@ const CreateReply: React.FC = () => {
                         {isLiked(parentPost.id) ? (
                             <span
                                 style={{ color: 'pink', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleLikeClick(parentPost.id);
-                                }}
+                                // onClick={(e) => {
+                                //     e.stopPropagation();
+                                //     handleLikeClick(parentPost.id);
+                                // }}
                             >
                                 <FavoriteIcon style={{fontSize:20,color:'pink', marginLeft: '30px'}}/>
                                 {parentPost.likes_count}
@@ -146,10 +146,10 @@ const CreateReply: React.FC = () => {
                         ) : (
                             <span
                                 style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleLikeClick(parentPost.id);
-                                }}
+                                // onClick={(e) => {
+                                //     e.stopPropagation();
+                                //     handleLikeClick(parentPost.id);
+                                // }}
                             >
                                 <FavoriteBorderIcon style={{fontSize:20,color:'gray', marginLeft: '30px'}}/>
                                 {parentPost.likes_count}
