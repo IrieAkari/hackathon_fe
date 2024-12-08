@@ -2,16 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './Page.css';
 import { fetchPost } from '../utils/API/fetchPost';
+import { toggleLike } from '../utils/API/toggleLike';
 import { fetchReplies } from '../utils/API/fetchReplies';
 import { fetchLikedPosts } from '../utils/API/fetchLikedPosts';
 import { handleUserNameClick } from '../utils/auth/handleUserNameClick';
 import { showTooltip, hideTooltip } from '../utils/ui/tooltipUtils'; // 新しい関数をインポート
 import { Post } from '../types';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const PostDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [post, setPost] = useState<Post | null>(null);
+    const [posts, setPosts] = useState<Post[]>([]);
     const [replies, setReplies] = useState<Post[]>([]);
     const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set<string>());
     const [error, setError] = useState<string>('');
@@ -66,6 +70,16 @@ const PostDetail: React.FC = () => {
     };
 
     /**
+     * 「いいね」ボタンをクリックしたときの処理。
+     * 
+     * @param postId - 投稿のID。
+     */
+    const handleLikeClick = (postId: string) => {
+        const isLiked = likedPosts.has(postId);
+        toggleLike(postId, isLiked, setLikedPosts, setPosts, setError);
+    };
+
+    /**
      * 投稿が「いいね」されているかどうかを確認する関数。
      * 
      * @param postId - 投稿のID。
@@ -75,7 +89,6 @@ const PostDetail: React.FC = () => {
 
     return (
         <div className="top-page">
-            <h2>投稿詳細</h2>
             <div className="post-container-detail">
                 {post.parent_id && (
                     <button 
@@ -98,7 +111,33 @@ const PostDetail: React.FC = () => {
                 </div>
                 <p className="post-content">{post.content}</p>
                 <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-                    <span style={{ color: isLiked(post.id) ? 'pink' : 'inherit' }}>いいね {post.likes_count}</span>　リプライ {post.replys_count}
+                    {isLiked(post.id) ? (
+                    
+                        <span
+                            style={{ color: 'pink', cursor: 'pointer' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleLikeClick(post.id);
+                                }}
+                            >
+                                <FavoriteIcon style={{fontSize:20,color:'pink'}}/>
+                                {post.likes_count}                                
+                                </span>
+                    ) : (
+                        <span
+                            style={{ cursor: 'pointer' }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleLikeClick(post.id);
+                            }}
+                        >
+                            <FavoriteBorderIcon  style={{fontSize:20,color:'gray'}}/>
+                            {post.likes_count}
+                        </span>
+                    )}
+                    
+                    
+                    リプライ {post.replys_count}
                 </div>
                 {post.trust_score >= 0 && post.trust_score <= 49 && (
                     <span 
@@ -129,7 +168,10 @@ const PostDetail: React.FC = () => {
                         <div className="post-header">
                             <span 
                                 className="user-name"
-                                onClick={() => handleUserNameClick(reply.user_id, setError, navigate)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleUserNameClick(reply.user_id, setError, navigate);
+                                }}
                             >
                                 {reply.user_name}
                             </span> 
@@ -139,7 +181,30 @@ const PostDetail: React.FC = () => {
                         </div>
                         <p className="post-content">{reply.content}</p>
                         <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-                            <span style={{ color: isLiked(reply.id) ? 'pink' : 'inherit' }}>いいね {reply.likes_count}</span>　リプライ {reply.replys_count}
+                            {isLiked(reply.id) ? (
+                                <span
+                                    style={{ color: 'pink', cursor: 'pointer' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClick(reply.id);
+                                    }}
+                                >
+                                    <FavoriteIcon style={{fontSize:20,color:'pink'}}/>
+                                    {reply.likes_count}
+                                </span>
+                            ) : (
+                                <span
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClick(reply.id);
+                                    }}
+                                >
+                                    <FavoriteBorderIcon  style={{fontSize:20,color:'gray'}}/>
+                                    {reply.likes_count}
+                                </span>
+                            )}
+                            リプライ {reply.replys_count}
                         </div>
                         {reply.trust_score >= 0 && reply.trust_score <= 49 && (
                             <span 

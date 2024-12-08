@@ -8,6 +8,9 @@ import { showTooltip, hideTooltip } from '../utils/ui/tooltipUtils'; // 新し�
 import { Post } from '../types';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
 import './Page.css'; 
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
 
 const TopPage: React.FC = () => {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -60,6 +63,7 @@ const TopPage: React.FC = () => {
                         key={post.id} 
                         className="post-container"
                         onClick={() => handlePostClick(post.id)}
+                        style={{ cursor: 'pointer' }}
                     >
                         <div className="post-header">
                             <span 
@@ -77,15 +81,30 @@ const TopPage: React.FC = () => {
                         </div>
                         <p className="post-content">{post.content}</p>
                         <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-                            <span 
-                                style={{ color: isLiked(post.id) ? 'pink' : 'inherit', cursor: 'pointer' }} 
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleLikeClick(post.id);
-                                }}
-                            >
-                                いいね {post.likes_count}
-                            </span>　リプライ {post.replys_count}
+                            {isLiked(post.id) ? (
+                                <span
+                                    style={{ color: 'pink', cursor: 'pointer' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClick(post.id);
+                                    }}
+                                >
+                                    <FavoriteIcon style={{fontSize:20,color:'pink'}}/>
+                                    {post.likes_count}
+                                </span>
+                            ) : (
+                                <span
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClick(post.id);
+                                    }}
+                                >
+                                    <FavoriteBorderIcon  style={{fontSize:20,color:'gray'}}/>
+                                    {post.likes_count}
+                                </span>
+                            )}
+                            リプライ {post.replys_count}
                         </div>
                         {post.trust_score >= 0 && post.trust_score <= 49 && (
                             <span 
