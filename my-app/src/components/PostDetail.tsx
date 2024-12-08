@@ -13,6 +13,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import ReplyIcon from '@mui/icons-material/Reply';
 
 const PostDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -92,17 +93,17 @@ const PostDetail: React.FC = () => {
     return (
         <div className="top-page">
             <div className="post-container-detail">
-                {post.parent_id && (
-                    <button 
-                        onClick={() => handleParentPostClick(post.parent_id!)} 
-                        className="parent-post-button"
-                    >
-                        親投稿
-                    </button>
-                )}
                 <div className="post-header">
+                    {post.parent_id && (
+                        <button 
+                            onClick={() => handleParentPostClick(post.parent_id!)} 
+                            className="reply-label"
+                        >
+                            <ReplyIcon style={{fontSize:20,color:'#505b86'}}/>
+                        </button>
+                    )}
                     <span 
-                        className="user-name"
+                        className="user-name" style={{ marginLeft: post.parent_id ? '50px' : '0' }}
                         onClick={() => handleUserNameClick(post.user_id, setError, navigate)}
                     >
                         {post.user_name}
@@ -173,14 +174,18 @@ const PostDetail: React.FC = () => {
                         onClick={() => handleReplyClick(reply.id)}
                         style={{ cursor: 'pointer' }}
                     >
-                        <span className="reply-label">リプライ</span>
+                        {/* <span className="reply-label">リプライ</span> */}
                         <div className="post-header">
+                            <span className="reply-label" style={{ marginRight: '5px' }}>
+                                <ReplyIcon style={{fontSize:20,color:'#505b86'}}/>
+                            </span>
                             <span 
                                 className="user-name"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     handleUserNameClick(reply.user_id, setError, navigate);
                                 }}
+                                style={{ marginLeft:'30px'}}
                             >
                                 {reply.user_name}
                             </span> 

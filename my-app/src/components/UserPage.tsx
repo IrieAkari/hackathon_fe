@@ -12,7 +12,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-
+import ReplyIcon from '@mui/icons-material/Reply';
 
 const UserPage: React.FC = () => {
     const { userId } = useParams<{ userId: string }>();
@@ -63,21 +63,26 @@ const UserPage: React.FC = () => {
                         key={post.id} 
                         className="post-container-detail"
                         onClick={() => handlePostClick(post.id)}
+                        style={{ cursor: 'pointer' }}
                     >
-                        {post.parent_id && (
-                            <span className="reply-label">
-                                リプライ
-                            </span>
-                        )}
+
 
                         <div className="post-header">
-                            <span className="user-name">
-                                {post.user_name}
-                            </span> 
-                            <span className="post-date">
-                                {new Date(post.created_at).toLocaleString()}
-                            </span>
-                        </div>
+                                {post.parent_id && (
+                                    <span className="reply-label" style={{ marginRight: '5px' }}>
+                                        <ReplyIcon style={{fontSize:20,color:'#505b86'}}/>
+                                    </span>
+                                )}
+                                <span className="user-name" style={{ marginLeft: post.parent_id ? '30px' : '0' }}>
+                                    {post.user_name}
+                                </span>
+                                <span className="post-date">
+                                    {new Date(post.created_at).toLocaleString()}
+                                </span>
+                            </div>
+
+
+
                         <p className="post-content">{post.content}</p>
                         <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' , display: 'flex', alignItems: 'center'}}>
                             {isLiked(post.id) ? (

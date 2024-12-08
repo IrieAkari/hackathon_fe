@@ -23,6 +23,10 @@ const CreatePost: React.FC = () => {
             setError('投稿内容は200文字以内にしてください');
             return;
         }
+        if (content.length == 0) {
+            setError('投稿内容を入力してください');
+            return;
+        }
         const user = fireAuth.currentUser;
         if (user) {
             try {
