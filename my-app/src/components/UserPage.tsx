@@ -55,7 +55,7 @@ const UserPage: React.FC = () => {
 
     return (
         <div className="top-page">
-            <h2>{userName}の投稿</h2>
+            <h1 className='mypage'>{userName}</h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
                 {posts.map(post => (
