@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { fireAuth } from '../firebase';
-
+import { Container, TextField, Button, Typography, Box, Alert } from '@mui/material';
 import './Page.css'; 
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -23,7 +23,7 @@ const CreatePost: React.FC = () => {
             setError('投稿内容は200文字以内にしてください');
             return;
         }
-        if (content.length == 0) {
+        if (content.length === 0) {
             setError('投稿内容を入力してください');
             return;
         }
@@ -53,33 +53,53 @@ const CreatePost: React.FC = () => {
     };
 
     return (
-        <div>
-            <h2>新規投稿</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <textarea
-                        value={content}
-                        onChange={(e) => {
-                            setContent(e.target.value);
-                            if (e.target.value.length <= 200) {
-                                setError('');
-                            }
-                        }}
-                        placeholder="投稿内容を入力してください"
-                        rows={5}
-                        cols={40}
-                    />
-                </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                <button type="submit">投稿</button>
-            </form>
-            <div style={{ position: 'fixed', bottom: 10, left: 10 }}>
+        <Container maxWidth="sm">
+            <h1 className='mypage'>
+                新規投稿
+            </h1>
+            <Box
+                component="form"
+                onSubmit={handleSubmit}
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+                width="600px"
+            >
+                <TextField
+                    value={content}
+                    onChange={(e) => {
+                        setContent(e.target.value);
+                        if (e.target.value.length <= 200) {
+                            setError('');
+                        }
+                    }}
+                    placeholder="投稿内容を入力してください"
+                    multiline
+                    rows={5}
+                    fullWidth
+                    variant="outlined"
+                    sx={{ mb: 2 }}
+                />
+                {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    sx={{ mb: 2 }}
+                    className='login-button'
+                >
+                    投稿
+                </Button>
+            </Box>
+            <Box sx={{ position: 'fixed', bottom: 10, left: 10 }}>
                 <Link to="/top" style={{ color: 'white', marginRight: '10px' }}>ホーム</Link>
-            </div>
-            <div style={{ position: 'fixed', bottom: 10, right: 10 }}>
+            </Box>
+            <Box sx={{ position: 'fixed', bottom: 10, right: 10 }}>
                 <Link to="/mypage" style={{ color: 'white', marginRight: '10px' }}>マイページ</Link>
-            </div>
-        </div>
+            </Box>
+        </Container>
     );
 };
 

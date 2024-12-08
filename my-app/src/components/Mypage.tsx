@@ -69,7 +69,7 @@ const Mypage: React.FC = () => {
             {/* <div style={{ position: 'fixed', top: 10, right: 10 }}>
                 <button onClick={handleDeleteAccount}>Delete Account</button>
             </div> */}
-            <h1>マイページ</h1>
+            <h1 className='mypage' >My Page</h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
                 {Array.isArray(posts) && posts.length > 0 ? (

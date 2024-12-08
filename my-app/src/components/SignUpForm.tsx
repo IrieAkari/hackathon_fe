@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
 import { fireAuth } from '../firebase';
+import { Container, TextField, Button, Typography, Box, Alert } from '@mui/material';
+
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const SignUpForm: React.FC = () => {
@@ -50,42 +52,84 @@ const SignUpForm: React.FC = () => {
     };
 
     return (
-        <div>
-            <form onSubmit={handleSignUp}>
-                <h2>新規ユーザー作成</h2>
-                <div>
-                    <label>Name:</label>
-                    <input
-                        type="text"
+        <Container maxWidth="xs" className="login-container">
+            <Box
+                sx={{
+                    mt: 3,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <Typography component="h1" variant="h4" className="login-title">
+                    Hackathon X
+                </Typography>
+                <Box
+                    component="form"
+                    onSubmit={handleSignUp}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Typography component="h1" variant="h5">
+                        新規ユーザー作成
+                    </Typography>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="name"
+                        label="Name"
+                        name="name"
+                        autoComplete="name"
+                        autoFocus
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        maxLength={15} // ユーザー名の最大文字数を15に設定
+                        inputProps={{ maxLength: 15 }} // ユーザー名の最大文字数を15に設定
+                        className="login-input"
                     />
-                </div>
-                <div>
-                    <label>Email:</label>
-                    <input
-                        type="email"
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email"
+                        name="email"
+                        autoComplete="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        className="login-input"
                     />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
                         type="password"
+                        id="password"
+                        autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        className="login-input"
                     />
-                </div>
-                <button type="submit">Sign Up</button>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-            </form>
-            <p>
-                既にアカウントをお持ちですか？ <Link to="/">ログインページに戻る</Link>
-            </p>
-            <p>API Base URL: {API_BASE_URL}</p>
-        </div>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        className="login-button"
+                    >
+                        Sign Up
+                    </Button>
+                    {error && <Alert severity="error">{error}</Alert>}
+                </Box>
+                <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>
+                    既にアカウントをお持ちですか？ <Link to="/">ログインページに戻る</Link>
+                </Typography>
+            </Box>
+        </Container>
     );
 };
 

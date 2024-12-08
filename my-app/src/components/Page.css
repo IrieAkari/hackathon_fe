@@ -107,12 +107,16 @@ body {
     padding: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
-    margin-left: 40px;
+    margin-left: 100px;
+    border-left: 5px solid #3a425afe;
+
     
     width: 1000px;
     box-sizing: border-box;
     word-wrap: break-word; /* 投稿内容を改行する */
     position: relative; /* 親要素に相対位置を設定 */
+
+
 }
 
 .fixed-bottom-right {
@@ -139,4 +143,47 @@ body {
     flex-grow: 1;
     justify-content: center; /* 中央寄せ */
     margin: 0 20px; /* サイドバーと投稿間の余白 */
+}
+
+.mypage{
+    color: #3a425afe;
+    padding: 20px;
+    margin: 0px 0;
+    width: 100%;
+    max-width: 1200px;
+    min-width: 500px;
+    box-sizing: border-box;
+    word-wrap: break-word; /* 投稿内容を改行する */
+    position: relative; /* 親要素に相対位置を設定 */
+}
+
+.login-input {
+    width: 600px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+}
+
+.login-button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 300px;
+    color: white;
+    background-color: #3a425afe;
+}
+
+
+.login-button-back {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 80px;
+    color: #3a425afe;
+    border-color: #3a425afe;
+}
+
+.reply-button {
+    margin-top: 20px;
+    margin-bottom: 0px;
+    width: 150px;
+    height: 50px;
+    color: #3a425afe;
 }
