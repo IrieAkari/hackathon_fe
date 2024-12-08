@@ -32,7 +32,7 @@ const Sidebar: React.FC = () => {
         <Box className="sidebar">
             <Toolbar className="sidebar-toolbar">
                 <Typography variant="h6" noWrap>
-                    Hackathon X
+                    Trust X
                 </Typography>
             </Toolbar>
             <List className="sidebar-list">
