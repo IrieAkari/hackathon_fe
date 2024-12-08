@@ -47,7 +47,7 @@ const LoginForm: React.FC = () => {
                 }}
             >
                 <Typography component="h1" variant="h4" className="login-title">
-                    Hackathon X
+                    Trust X
                 </Typography>
                 <Box
                     component="form"
