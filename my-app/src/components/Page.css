@@ -1,0 +1,142 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.parent-post-button {
+    position: absolute; /* 絶対位置 */
+    top: 10px; /* 上からの距離 */
+    left: 10px; /* 左からの距離 */
+    color: yellow; /* 文字色 */
+    background: none; /* 背景なし */
+    border: none; /* 枠線なし */
+    cursor: pointer; /* カーソルをポインタに変更 */
+    font-weight: bold; /* 太字 */
+}
+
+.top-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.post-container {
+    border: 0.5px solid #d4dae9; /* 枠の色を黒色に変更 */
+    background-color: #fff;
+    padding: 20px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 1200px;
+    min-width: 500px;
+    box-sizing: border-box;
+    word-wrap: break-word; /* 投稿内容を改行する */
+    position: relative; /* 親要素に相対位置を設定 */
+}
+
+.post-container-detail {
+    border: 0.5px solid #d4dae9; /* 枠の色を黒色に変更 */
+    background-color: #fff;
+    padding: 20px;
+    margin: 10px 0;
+    width: 800px;
+    box-sizing: border-box;
+    word-wrap: break-word; /* 投稿内容を改行する */
+    position: relative; /* 親要素に相対位置を設定 */
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-name {
+    position: absolute;
+    top: 16px;
+    left: 40px;
+    cursor: pointer;
+    color: rgb(58, 62, 77);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.post-date {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 0.8em;
+    color: #888;
+}
+
+.post-content {
+    text-align: left; /* 本文を左揃えにする */
+    margin-top: 40px;
+    margin-left: 20px;
+    margin-right: 60px;
+    margin-bottom: 20px;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: #3a425afe;
+    color: #e23939;
+    /* border: 1px solid #c64e4e; */
+    padding: 10px; /* パディングを小さく */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-size: 1em; /* フォントサイズを小さく */
+    max-width: 200px; /* 最大幅を設定 */
+    white-space: normal; /* テキストを改行 */
+    word-wrap: break-word; /* 長い単語を改行 */
+}
+
+.warning-text {
+    position: absolute;
+    top: 45px; 
+    right: 35px; 
+}
+
+/* リプライコンテナのスタイル */
+.reply-container {
+    border: 0.5px solid #d4dae9; /* 枠の色を黒色に変更 */
+    background-color: #fff;
+    padding: 20px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 800px;
+    min-width: 300px;
+    box-sizing: border-box;
+    word-wrap: break-word; /* 投稿内容を改行する */
+    position: relative; /* 親要素に相対位置を設定 */
+}
+
+.fixed-bottom-right {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+}
+
+.fixed-bottom-left {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+}
+
+.reply-label {
+    position: absolute !important;
+    bottom: 10px !important;
+    right: 10px !important;
+    color: yellow !important;
+    font-weight: bold !important;
+}
+
+.page-content {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center; /* 中央寄せ */
+    margin: 0 20px; /* サイドバーと投稿間の余白 */
+}

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth, deleteUser } from 'firebase/auth';
-import { Link, useNavigate } from 'react-router-dom';
-import { fetchUserName } from '../../utils/API/fetchUserName';
-import { fetchUserPosts } from '../../utils/API/fetchUserPosts';
-import { fetchLikedPosts } from '../../utils/API/fetchLikedPosts';
-import { toggleLike } from '../../utils/API/toggleLike';
-import { showTooltip, hideTooltip } from '../../utils/ui/tooltipUtils';
-import { Post } from '../../types';
-import './Mypage.css';
+import { useNavigate } from 'react-router-dom';
+import { fetchUserName } from '../utils/API/fetchUserName';
+import { fetchUserPosts } from '../utils/API/fetchUserPosts';
+import { fetchLikedPosts } from '../utils/API/fetchLikedPosts';
+import { toggleLike } from '../utils/API/toggleLike';
+import { showTooltip, hideTooltip } from '../utils/ui/tooltipUtils';
+import { Post } from '../types';
+import AnnouncementIcon from '@mui/icons-material/Announcement';
+import './Page.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -59,11 +60,11 @@ const Mypage: React.FC = () => {
     const isLiked = (postId: string) => likedPosts.has(postId);
 
     return (
-        <div>
+        <div className="top-page">
             <div style={{ position: 'fixed', top: 10, right: 10 }}>
                 <button onClick={handleDeleteAccount}>Delete Account</button>
             </div>
-            <h1>{name}</h1>
+            <h1>マイページ</h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
                 {Array.isArray(posts) && posts.length > 0 ? (
@@ -74,13 +75,16 @@ const Mypage: React.FC = () => {
                             onClick={() => handlePostClick(post.id)}
                         >
                             {post.parent_id && <span className="reply-label">リプライ</span>}
-                            <h3>
-                                {post.user_name}{' '}
-                                <span style={{ fontSize: '0.8em', color: '#888' }}>
+
+                            <div className="post-header">
+                                <span className="user-name">
+                                    {post.user_name}
+                                </span>
+                                <span className="post-date">
                                     {new Date(post.created_at).toLocaleString()}
                                 </span>
-                            </h3>
-                            <p>{post.content}</p>
+                            </div>
+                            <p className="post-content">{post.content}</p>
                             <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
                                 <span
                                     style={{ color: isLiked(post.id) ? 'pink' : 'inherit', cursor: 'pointer' }}
@@ -106,7 +110,7 @@ const Mypage: React.FC = () => {
                                     }
                                     onMouseLeave={() => hideTooltip(setTooltip, setTooltipPosition)}
                                 >
-                                    注意：信頼度の低い投稿
+                                    <AnnouncementIcon style={{fontSize:30,color:'red'}}/>
                                 </span>
                             )}
                         </div>
@@ -123,16 +127,6 @@ const Mypage: React.FC = () => {
                     {tooltip}
                 </div>
             )}
-            <div className="fixed-bottom-left">
-                <Link to="/top" style={{ color: 'white', marginRight: '10px' }}>
-                    ホーム
-                </Link>
-            </div>
-            <div className="fixed-bottom-right">
-                <Link to="/createpost" style={{ color: 'white', marginRight: '10px' }}>
-                    新規投稿
-                </Link>
-            </div>
         </div>
     );
 };

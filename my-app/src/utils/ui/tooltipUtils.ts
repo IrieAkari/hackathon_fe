@@ -16,7 +16,7 @@ export const showTooltip = (
 ) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setTooltip(description);
-    setTooltipPosition({ top: rect.top + window.scrollY + 50, left: rect.left + window.scrollX - 80 });
+    setTooltipPosition({ top: rect.top + window.scrollY + 40, left: rect.left + window.scrollX - 200 });
 };
 
 /**
@@ -32,3 +32,4 @@ export const hideTooltip = (
     setTooltip(null);
     setTooltipPosition(null);
 };
+

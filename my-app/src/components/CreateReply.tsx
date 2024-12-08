@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
-import { fireAuth } from '../../firebase';
-import { fetchParentPost } from '../../utils/API/fetchParentPost';
-import { fetchLikedPosts } from '../../utils/API/fetchLikedPosts';
-import { showTooltip, hideTooltip } from '../../utils/ui/tooltipUtils'; // 新しい関数をインポート
-import { Post } from '../../types';
-import './CreateReply.css'; // カスタムツールチップのスタイルを追加
+import { useNavigate, useParams } from 'react-router-dom';
+import { fireAuth } from '../firebase';
+import { fetchParentPost } from '../utils/API/fetchParentPost';
+import { fetchLikedPosts } from '../utils/API/fetchLikedPosts';
+import { showTooltip, hideTooltip } from '../utils/ui/tooltipUtils'; // 新しい関数をインポート
+import { Post } from '../types';
+import AnnouncementIcon from '@mui/icons-material/Announcement';
+import './Page.css'; // カスタムツールチップのスタイルを追加
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -67,10 +68,10 @@ const CreateReply: React.FC = () => {
     const isLiked = (postId: string) => likedPosts.has(postId);
 
     return (
-        <div>
+        <div className="top-page">
             <h2>リプライ作成</h2>
             {parentPost && (
-                <div className="post-container">
+                <div className="post-container-detail">
                     {parentPost.parent_id && (
                         <button 
                             onClick={() => navigate(`/posts/${parentPost.parent_id!}`)} 
@@ -79,8 +80,15 @@ const CreateReply: React.FC = () => {
                             親投稿
                         </button>
                     )}
-                    <h3>{parentPost.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(parentPost.created_at).toLocaleString()}</span></h3>
-                    <p>{parentPost.content}</p>
+                    <div className="post-header">
+                        <span className="user-name">
+                            {parentPost.user_name}
+                        </span> 
+                        <span className="post-date">
+                            {new Date(parentPost.created_at).toLocaleString()}
+                        </span>
+                    </div>
+                    <p className="post-content">{parentPost.content}</p>
                     <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
                         <span style={{ color: isLiked(parentPost.id) ? 'pink' : 'inherit' }}>いいね {parentPost.likes_count}</span>　リプライ {parentPost.replys_count}
                     </div>
@@ -90,7 +98,7 @@ const CreateReply: React.FC = () => {
                             onMouseEnter={(e) => showTooltip(parentPost.trust_description || '', e, setTooltip, setTooltipPosition)} // 追加
                             onMouseLeave={() => hideTooltip(setTooltip, setTooltipPosition)} // 追加
                         >
-                            注意：信頼度の低い投稿
+                            <AnnouncementIcon style={{fontSize:30,color:'red'}}/>
                         </span>
                     )}
                 </div>
@@ -119,12 +127,6 @@ const CreateReply: React.FC = () => {
                     {tooltip}
                 </div>
             )}
-            <div style={{ position: 'fixed', bottom: 10, left: 10 }}>
-                <Link to="/top" style={{ color: 'white', marginRight: '10px' }}>ホーム</Link>
-            </div>
-            <div style={{ position: 'fixed', bottom: 10, right: 10 }}>
-                <Link to="/mypage" style={{ color: 'white' }}>マイページ</Link>
-            </div>
         </div>
     );
 };
