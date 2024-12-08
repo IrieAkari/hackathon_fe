@@ -117,10 +117,10 @@ const PostDetail: React.FC = () => {
                             {isLiked(post.id) ? (
                                 <span
                                     style={{ color: 'pink', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleLikeClick(post.id);
-                                    }}
+                                    // onClick={(e) => {
+                                    //     e.stopPropagation();
+                                    //     handleLikeClick(post.id);
+                                    // }}
                                 >
                                     <FavoriteIcon style={{fontSize:20,color:'pink', marginLeft: '30px'}}/>
                                     {post.likes_count}
@@ -128,10 +128,10 @@ const PostDetail: React.FC = () => {
                             ) : (
                                 <span
                                     style={{ cursor: 'pointer' , display: 'flex', alignItems: 'center'}}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleLikeClick(post.id);
-                                    }}
+                                    // onClick={(e) => {
+                                    //     e.stopPropagation();
+                                    //     handleLikeClick(post.id);
+                                    // }}
                                 >
                                     <FavoriteBorderIcon  style={{fontSize:20,color:'gray', marginLeft: '30px'}}/>
                                     {post.likes_count}
