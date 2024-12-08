@@ -10,6 +10,8 @@ import AnnouncementIcon from '@mui/icons-material/Announcement';
 import './Page.css'; // カスタムツールチップのスタイルを追加
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -103,36 +105,42 @@ const CreateReply: React.FC = () => {
                         </span>
                     </div>
                     <p className="post-content">{parentPost.content}</p>
-                    <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-
-
-                        {isLiked(parentPost.id) ? (
-                            <span
-                                style={{ color: 'pink', cursor: 'pointer' }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleLikeClick(parentPost.id);
-                                }}
-                            >
-                                <FavoriteIcon style={{fontSize:20,color:'pink'}}/>
-                                {parentPost.likes_count}
-                            </span>
-                        ) : (
-                            <span
-                                style={{ cursor: 'pointer' }}
-                                onClick={(e) => {
-                                    e.stopPropagation();                                        
-                                    handleLikeClick(parentPost.id);
-                                }}
-                            >
-                                <FavoriteBorderIcon  style={{fontSize:20,color:'gray'}}/>
-                                {parentPost.likes_count}
-                            </span>
-                        )}
-                        
-                        
-                        リプライ {parentPost.replys_count}
-                    </div>
+                    <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' , display: 'flex', alignItems: 'center'}}>
+                            {isLiked(parentPost.id) ? (
+                                <span
+                                    style={{ color: 'pink', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClick(parentPost.id);
+                                    }}
+                                >
+                                    <FavoriteIcon style={{fontSize:20,color:'pink', marginLeft: '30px'}}/>
+                                    {parentPost.likes_count}
+                                </span>
+                            ) : (
+                                <span
+                                    style={{ cursor: 'pointer' , display: 'flex', alignItems: 'center'}}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClick(parentPost.id);
+                                    }}
+                                >
+                                    <FavoriteBorderIcon  style={{fontSize:20,color:'gray', marginLeft: '30px'}}/>
+                                    {parentPost.likes_count}
+                                </span>
+                            )}
+                            {parentPost.replys_count > 0 ? (
+                                <span style={{ marginLeft: '10px', color: '#555', display: 'flex', alignItems: 'center' }}>
+                                    <ChatBubbleIcon  style={{fontSize:20,color:'MediumSeaGreen', marginLeft: '30px'}}/>
+                                    {parentPost.replys_count}
+                                </span>
+                            ) : (
+                                <span style={{ marginLeft: '10px', color: '#555' , display: 'flex', alignItems: 'center'}}>
+                                    <ChatBubbleOutlineIcon style={{fontSize:20,color:'grey', marginLeft: '30px'}}/>
+                                    {parentPost.replys_count}
+                                </span>
+                            )}
+                        </div>
                     {parentPost.trust_score >= 0 && parentPost.trust_score <= 49 && (
                         <span 
                             className="warning-text"

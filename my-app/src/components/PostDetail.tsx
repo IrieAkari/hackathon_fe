@@ -11,6 +11,8 @@ import { Post } from '../types';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 const PostDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -110,35 +112,42 @@ const PostDetail: React.FC = () => {
                     </span>
                 </div>
                 <p className="post-content">{post.content}</p>
-                <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-                    {isLiked(post.id) ? (
-                    
-                        <span
-                            style={{ color: 'pink', cursor: 'pointer' }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleLikeClick(post.id);
-                                }}
-                            >
-                                <FavoriteIcon style={{fontSize:20,color:'pink'}}/>
-                                {post.likes_count}                                
+                <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' , display: 'flex', alignItems: 'center'}}>
+                            {isLiked(post.id) ? (
+                                <span
+                                    style={{ color: 'pink', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClick(post.id);
+                                    }}
+                                >
+                                    <FavoriteIcon style={{fontSize:20,color:'pink', marginLeft: '30px'}}/>
+                                    {post.likes_count}
                                 </span>
-                    ) : (
-                        <span
-                            style={{ cursor: 'pointer' }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleLikeClick(post.id);
-                            }}
-                        >
-                            <FavoriteBorderIcon  style={{fontSize:20,color:'gray'}}/>
-                            {post.likes_count}
-                        </span>
-                    )}
-                    
-                    
-                    リプライ {post.replys_count}
-                </div>
+                            ) : (
+                                <span
+                                    style={{ cursor: 'pointer' , display: 'flex', alignItems: 'center'}}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClick(post.id);
+                                    }}
+                                >
+                                    <FavoriteBorderIcon  style={{fontSize:20,color:'gray', marginLeft: '30px'}}/>
+                                    {post.likes_count}
+                                </span>
+                            )}
+                            {post.replys_count > 0 ? (
+                                <span style={{ marginLeft: '10px', color: '#555', display: 'flex', alignItems: 'center' }}>
+                                    <ChatBubbleIcon  style={{fontSize:20,color:'MediumSeaGreen', marginLeft: '30px'}}/>
+                                    {post.replys_count}
+                                </span>
+                            ) : (
+                                <span style={{ marginLeft: '10px', color: '#555' , display: 'flex', alignItems: 'center'}}>
+                                    <ChatBubbleOutlineIcon style={{fontSize:20,color:'grey', marginLeft: '30px'}}/>
+                                    {post.replys_count}
+                                </span>
+                            )}
+                        </div>
                 {post.trust_score >= 0 && post.trust_score <= 49 && (
                     <span 
                         className="warning-text"
@@ -180,31 +189,41 @@ const PostDetail: React.FC = () => {
                             </span>
                         </div>
                         <p className="post-content">{reply.content}</p>
-                        <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
+                        <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' , display: 'flex', alignItems: 'center'}}>
                             {isLiked(reply.id) ? (
                                 <span
-                                    style={{ color: 'pink', cursor: 'pointer' }}
+                                    style={{ color: 'pink', cursor: 'pointer', display: 'flex', alignItems: 'center'  }}
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         handleLikeClick(reply.id);
                                     }}
                                 >
-                                    <FavoriteIcon style={{fontSize:20,color:'pink'}}/>
+                                    <FavoriteIcon style={{fontSize:20,color:'pink', marginLeft: '30px'}}/>
                                     {reply.likes_count}
                                 </span>
                             ) : (
                                 <span
-                                    style={{ cursor: 'pointer' }}
+                                    style={{ cursor: 'pointer' , display: 'flex', alignItems: 'center'}}
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         handleLikeClick(reply.id);
                                     }}
                                 >
-                                    <FavoriteBorderIcon  style={{fontSize:20,color:'gray'}}/>
+                                    <FavoriteBorderIcon style={{fontSize:20,color:'gray', marginLeft: '30px'}}/>
                                     {reply.likes_count}
                                 </span>
                             )}
-                            リプライ {reply.replys_count}
+                            {reply.replys_count > 0 ? (
+                                <span style={{ marginLeft: '10px', color: '#555', display: 'flex', alignItems: 'center' }}>
+                                    <ChatBubbleIcon  style={{fontSize:20,color:'MediumSeaGreen', marginLeft: '30px'}}/>
+                                    {reply.replys_count}
+                                </span>
+                            ) : (
+                                <span style={{ marginLeft: '10px', color: '#555' , display: 'flex', alignItems: 'center'}}>
+                                    <ChatBubbleOutlineIcon style={{fontSize:20,color:'grey', marginLeft: '30px'}}/>
+                                    {reply.replys_count}
+                                </span>
+                            )}
                         </div>
                         {reply.trust_score >= 0 && reply.trust_score <= 49 && (
                             <span 
