@@ -6,14 +6,19 @@ import { fetchLikedPosts } from '../utils/API/fetchLikedPosts';
 import { toggleLike } from '../utils/API/toggleLike';
 import { showTooltip, hideTooltip } from '../utils/ui/tooltipUtils'; // 新しい関数をインポート
 import { Post } from '../types';
+import { handleUserNameClick } from '../utils/auth/handleUserNameClick';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
 import './Page.css'; // カスタムツールチップのスタイルを追加
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import ReplyIcon from '@mui/icons-material/Reply';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const CreateReply: React.FC = () => {
+    const [post, setPost] = useState<Post | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
     const { parentId } = useParams<{ parentId: string }>();
     const [content, setContent] = useState<string>('');
@@ -44,6 +49,10 @@ const CreateReply: React.FC = () => {
             setError('リプライ内容は200文字以内にしてください');
             return;
         }
+        if (content.length == 0) {
+            setError('投稿内容を入力してください');
+            return;
+        }
         const user = fireAuth.currentUser;
         if (user) {
             try {
@@ -69,6 +78,20 @@ const CreateReply: React.FC = () => {
         }
     };
 
+
+    /**
+     * 親投稿をクリックしたときの処理。
+     * 
+     * @param parentId - 親投稿のID。
+     */
+        const handleParentPostClick = (parentId: string) => {
+            if (post?.is_parent_deleted) {
+                alert('親投稿は削除されました');
+            } else {
+                navigate(`/posts/${parentId}`);
+            }
+        };
+
     /**
      * 「いいね」ボタンをクリックしたときの処理。
      * 
@@ -86,53 +109,62 @@ const CreateReply: React.FC = () => {
             <h2>リプライ作成</h2>
             {parentPost && (
                 <div className="post-container-detail">
+                <div className="post-header">
                     {parentPost.parent_id && (
                         <button 
-                            onClick={() => navigate(`/posts/${parentPost.parent_id!}`)} 
-                            className="parent-post-button"
+                            onClick={() => handleParentPostClick(parentPost.parent_id!)} 
+                            className="reply-label"
                         >
-                            親投稿
+                            <ReplyIcon style={{fontSize:20,color:'#505b86'}}/>
                         </button>
                     )}
-                    <div className="post-header">
-                        <span className="user-name">
-                            {parentPost.user_name}
-                        </span> 
-                        <span className="post-date">
-                            {new Date(parentPost.created_at).toLocaleString()}
-                        </span>
-                    </div>
+                    <span 
+                        className="user-name" style={{ marginLeft: parentPost.parent_id ? '50px' : '0' }}
+                        onClick={() => handleUserNameClick(parentPost.user_id, setError, navigate)}
+                    >
+                        {parentPost.user_name}
+                    </span> 
+                    <span className="post-date">
+                        {new Date(parentPost.created_at).toLocaleString()}
+                    </span>
+                </div>
                     <p className="post-content">{parentPost.content}</p>
-                    <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-
-
-                        {isLiked(parentPost.id) ? (
-                            <span
-                                style={{ color: 'pink', cursor: 'pointer' }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleLikeClick(parentPost.id);
-                                }}
-                            >
-                                <FavoriteIcon style={{fontSize:20,color:'pink'}}/>
-                                {parentPost.likes_count}
-                            </span>
-                        ) : (
-                            <span
-                                style={{ cursor: 'pointer' }}
-                                onClick={(e) => {
-                                    e.stopPropagation();                                        
-                                    handleLikeClick(parentPost.id);
-                                }}
-                            >
-                                <FavoriteBorderIcon  style={{fontSize:20,color:'gray'}}/>
-                                {parentPost.likes_count}
-                            </span>
-                        )}
-                        
-                        
-                        リプライ {parentPost.replys_count}
-                    </div>
+                    <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' , display: 'flex', alignItems: 'center'}}>
+                            {isLiked(parentPost.id) ? (
+                                <span
+                                    style={{ color: 'pink', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClick(parentPost.id);
+                                    }}
+                                >
+                                    <FavoriteIcon style={{fontSize:20,color:'pink', marginLeft: '30px'}}/>
+                                    {parentPost.likes_count}
+                                </span>
+                            ) : (
+                                <span
+                                    style={{ cursor: 'pointer' , display: 'flex', alignItems: 'center'}}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClick(parentPost.id);
+                                    }}
+                                >
+                                    <FavoriteBorderIcon  style={{fontSize:20,color:'gray', marginLeft: '30px'}}/>
+                                    {parentPost.likes_count}
+                                </span>
+                            )}
+                            {parentPost.replys_count > 0 ? (
+                                <span style={{ marginLeft: '10px', color: '#555', display: 'flex', alignItems: 'center' }}>
+                                    <ChatBubbleIcon  style={{fontSize:20,color:'MediumSeaGreen', marginLeft: '30px'}}/>
+                                    {parentPost.replys_count}
+                                </span>
+                            ) : (
+                                <span style={{ marginLeft: '10px', color: '#555' , display: 'flex', alignItems: 'center'}}>
+                                    <ChatBubbleOutlineIcon style={{fontSize:20,color:'grey', marginLeft: '30px'}}/>
+                                    {parentPost.replys_count}
+                                </span>
+                            )}
+                        </div>
                     {parentPost.trust_score >= 0 && parentPost.trust_score <= 49 && (
                         <span 
                             className="warning-text"
