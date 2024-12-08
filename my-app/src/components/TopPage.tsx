@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { fetchPosts } from '../../utils/API/fetchPosts';
-import { fetchLikedPosts } from '../../utils/API/fetchLikedPosts';
-import { toggleLike } from '../../utils/API/toggleLike';
-import { handleUserNameClick } from '../../utils/auth/handleUserNameClick';
-import { showTooltip, hideTooltip } from '../../utils/ui/tooltipUtils'; // 新しい関数をインポート
-import { Post } from '../../types';
-import './TopPage.css'; // カスタムツールチップのスタイルを追加
+import { useNavigate } from 'react-router-dom';
+import { fetchPosts } from '../utils/API/fetchPosts';
+import { fetchLikedPosts } from '../utils/API/fetchLikedPosts';
+import { toggleLike } from '../utils/API/toggleLike';
+import { handleUserNameClick } from '../utils/auth/handleUserNameClick';
+import { showTooltip, hideTooltip } from '../utils/ui/tooltipUtils'; // 新しい関数をインポート
+import { Post } from '../types';
+import AnnouncementIcon from '@mui/icons-material/Announcement';
+import './Page.css'; 
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
 
 const TopPage: React.FC = () => {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -51,18 +55,19 @@ const TopPage: React.FC = () => {
 
     return (
         <div className="top-page">
-            <h2>最新の投稿</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {/* <h2>最新の投稿</h2>
+            {error && <p style={{ color: 'red' }}>{error}</p>} */}
             <div>
                 {posts.map(post => (
                     <div 
                         key={post.id} 
                         className="post-container"
                         onClick={() => handlePostClick(post.id)}
+                        style={{ cursor: 'pointer' }}
                     >
-                        <h3>
+                        <div className="post-header">
                             <span 
-                                style={{ cursor: 'pointer', color: 'blue' }} 
+                                className="user-name"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     handleUserNameClick(post.user_id, setError, navigate);
@@ -70,21 +75,36 @@ const TopPage: React.FC = () => {
                             >
                                 {post.user_name}
                             </span> 
-                            <span style={{ fontSize: '0.8em', color: '#888' }}>
+                            <span className="post-date">
                                 {new Date(post.created_at).toLocaleString()}
                             </span>
-                        </h3>
-                        <p>{post.content}</p>
+                        </div>
+                        <p className="post-content">{post.content}</p>
                         <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-                            <span 
-                                style={{ color: isLiked(post.id) ? 'pink' : 'inherit', cursor: 'pointer' }} 
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleLikeClick(post.id);
-                                }}
-                            >
-                                いいね {post.likes_count}
-                            </span>　リプライ {post.replys_count}
+                            {isLiked(post.id) ? (
+                                <span
+                                    style={{ color: 'pink', cursor: 'pointer' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClick(post.id);
+                                    }}
+                                >
+                                    <FavoriteIcon style={{fontSize:20,color:'pink'}}/>
+                                    {post.likes_count}
+                                </span>
+                            ) : (
+                                <span
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClick(post.id);
+                                    }}
+                                >
+                                    <FavoriteBorderIcon  style={{fontSize:20,color:'gray'}}/>
+                                    {post.likes_count}
+                                </span>
+                            )}
+                            リプライ {post.replys_count}
                         </div>
                         {post.trust_score >= 0 && post.trust_score <= 49 && (
                             <span 
@@ -92,7 +112,7 @@ const TopPage: React.FC = () => {
                                 onMouseEnter={(e) => showTooltip(post.trust_description || '', e, setTooltip, setTooltipPosition)} // 追加
                                 onMouseLeave={() => hideTooltip(setTooltip, setTooltipPosition)} // 追加
                             >
-                                注意：信頼度の低い投稿
+                                <AnnouncementIcon style={{fontSize:30,color:'red'}}/>
                             </span>
                         )}
                     </div>
@@ -103,11 +123,6 @@ const TopPage: React.FC = () => {
                     {tooltip}
                 </div>
             )}
-            <div className="fixed-bottom-right">
-                <Link to="/createpost" style={{ color: 'white', marginRight: '10px' }}>新規投稿</Link>
-                <br />
-                <Link to="/mypage" style={{ color: 'white' }}>マイページ</Link>
-            </div>
         </div>
     );
 };

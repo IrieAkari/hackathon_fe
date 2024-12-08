@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
-import { fireAuth } from '../../firebase';
-import { fetchParentPost } from '../../utils/API/fetchParentPost';
-import { fetchLikedPosts } from '../../utils/API/fetchLikedPosts';
-import { showTooltip, hideTooltip } from '../../utils/ui/tooltipUtils'; // 新しい関数をインポート
-import { Post } from '../../types';
-import './CreateReply.css'; // カスタムツールチップのスタイルを追加
+import { useNavigate, useParams } from 'react-router-dom';
+import { fireAuth } from '../firebase';
+import { fetchParentPost } from '../utils/API/fetchParentPost';
+import { fetchLikedPosts } from '../utils/API/fetchLikedPosts';
+import { toggleLike } from '../utils/API/toggleLike';
+import { showTooltip, hideTooltip } from '../utils/ui/tooltipUtils'; // 新しい関数をインポート
+import { Post } from '../types';
+import AnnouncementIcon from '@mui/icons-material/Announcement';
+import './Page.css'; // カスタムツールチップのスタイルを追加
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const CreateReply: React.FC = () => {
+    const [posts, setPosts] = useState<Post[]>([]);
     const { parentId } = useParams<{ parentId: string }>();
     const [content, setContent] = useState<string>('');
     const [error, setError] = useState<string>('');
@@ -64,13 +69,23 @@ const CreateReply: React.FC = () => {
         }
     };
 
+    /**
+     * 「いいね」ボタンをクリックしたときの処理。
+     * 
+     * @param postId - 投稿のID。
+     */
+    const handleLikeClick = (postId: string) => {
+        const isLiked = likedPosts.has(postId);
+        toggleLike(postId, isLiked, setLikedPosts, setPosts, setError);
+    };
+
     const isLiked = (postId: string) => likedPosts.has(postId);
 
     return (
-        <div>
+        <div className="top-page">
             <h2>リプライ作成</h2>
             {parentPost && (
-                <div className="post-container">
+                <div className="post-container-detail">
                     {parentPost.parent_id && (
                         <button 
                             onClick={() => navigate(`/posts/${parentPost.parent_id!}`)} 
@@ -79,10 +94,44 @@ const CreateReply: React.FC = () => {
                             親投稿
                         </button>
                     )}
-                    <h3>{parentPost.user_name} <span style={{ fontSize: '0.8em', color: '#888' }}>{new Date(parentPost.created_at).toLocaleString()}</span></h3>
-                    <p>{parentPost.content}</p>
+                    <div className="post-header">
+                        <span className="user-name">
+                            {parentPost.user_name}
+                        </span> 
+                        <span className="post-date">
+                            {new Date(parentPost.created_at).toLocaleString()}
+                        </span>
+                    </div>
+                    <p className="post-content">{parentPost.content}</p>
                     <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' }}>
-                        <span style={{ color: isLiked(parentPost.id) ? 'pink' : 'inherit' }}>いいね {parentPost.likes_count}</span>　リプライ {parentPost.replys_count}
+
+
+                        {isLiked(parentPost.id) ? (
+                            <span
+                                style={{ color: 'pink', cursor: 'pointer' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleLikeClick(parentPost.id);
+                                }}
+                            >
+                                <FavoriteIcon style={{fontSize:20,color:'pink'}}/>
+                                {parentPost.likes_count}
+                            </span>
+                        ) : (
+                            <span
+                                style={{ cursor: 'pointer' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();                                        
+                                    handleLikeClick(parentPost.id);
+                                }}
+                            >
+                                <FavoriteBorderIcon  style={{fontSize:20,color:'gray'}}/>
+                                {parentPost.likes_count}
+                            </span>
+                        )}
+                        
+                        
+                        リプライ {parentPost.replys_count}
                     </div>
                     {parentPost.trust_score >= 0 && parentPost.trust_score <= 49 && (
                         <span 
@@ -90,7 +139,7 @@ const CreateReply: React.FC = () => {
                             onMouseEnter={(e) => showTooltip(parentPost.trust_description || '', e, setTooltip, setTooltipPosition)} // 追加
                             onMouseLeave={() => hideTooltip(setTooltip, setTooltipPosition)} // 追加
                         >
-                            注意：信頼度の低い投稿
+                            <AnnouncementIcon style={{fontSize:30,color:'red'}}/>
                         </span>
                     )}
                 </div>
@@ -119,12 +168,6 @@ const CreateReply: React.FC = () => {
                     {tooltip}
                 </div>
             )}
-            <div style={{ position: 'fixed', bottom: 10, left: 10 }}>
-                <Link to="/top" style={{ color: 'white', marginRight: '10px' }}>ホーム</Link>
-            </div>
-            <div style={{ position: 'fixed', bottom: 10, right: 10 }}>
-                <Link to="/mypage" style={{ color: 'white' }}>マイページ</Link>
-            </div>
         </div>
     );
 };
