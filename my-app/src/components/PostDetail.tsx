@@ -158,10 +158,9 @@ const PostDetail: React.FC = () => {
                         <AnnouncementIcon style={{fontSize:30,color:'red'}}/>
                     </span>
                 )}
-                <button
-                    type="submit"
-                    color="primary"
-                    className='reply-button'
+                <button 
+                    onClick={handleCreateReplyClick} 
+                    className="create-reply-button"
                 >
                     リプライ
                 </button>
@@ -198,10 +197,10 @@ const PostDetail: React.FC = () => {
                             {isLiked(reply.id) ? (
                                 <span
                                     style={{ color: 'pink', cursor: 'pointer', display: 'flex', alignItems: 'center'  }}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleLikeClick(reply.id);
-                                    }}
+                                    // onClick={(e) => {
+                                    //     e.stopPropagation();
+                                    //     handleLikeClick(reply.id);
+                                    // }}
                                 >
                                     <FavoriteIcon style={{fontSize:20,color:'pink', marginLeft: '30px'}}/>
                                     {reply.likes_count}
@@ -209,10 +208,10 @@ const PostDetail: React.FC = () => {
                             ) : (
                                 <span
                                     style={{ cursor: 'pointer' , display: 'flex', alignItems: 'center'}}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleLikeClick(reply.id);
-                                    }}
+                                    // onClick={(e) => {
+                                    //     e.stopPropagation();
+                                    //     handleLikeClick(reply.id);
+                                    // }}
                                 >
                                     <FavoriteBorderIcon style={{fontSize:20,color:'gray', marginLeft: '30px'}}/>
                                     {reply.likes_count}
