@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { fireAuth } from '../firebase';
-//const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+import { Container, TextField, Button, Typography, Box, Alert } from '@mui/material';
+import './LoginForm.css'; // CSSファイルをインポート
 
 const LoginForm: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -36,32 +37,71 @@ const LoginForm: React.FC = () => {
     };
 
     return (
-        <div>
-            <form onSubmit={handleLogin}>
-                <h2>ログイン</h2>
-                <div>
-                    <label>Email:</label>
-                    <input
-                        type="email"
+        <Container maxWidth="xs" className="login-container">
+            <Box
+                sx={{
+                    mt: 3,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <Typography component="h1" variant="h4" className="login-title">
+                    Hackathon X
+                </Typography>
+                <Box
+                    component="form"
+                    onSubmit={handleLogin}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Typography component="h1" variant="h5">
+                        ログイン
+                    </Typography>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        className="login-input"
                     />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
                         type="password"
+                        id="password"
+                        autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        className="login-input"
                     />
-                </div>
-                <button type="submit">Login</button>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-            </form>
-            <p>
-                アカウントをお持ちでないですか？ <Link to="/signup">新規登録</Link>
-            </p>
-        </div>
+                    <Button 
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        className="login-button"
+                    >
+                        Login
+                    </Button>
+                    {error && <Alert severity="error">{error}</Alert>}
+                </Box>
+                <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>
+                    アカウントをお持ちでないですか？ <Link to="/signup">新規登録</Link>
+                </Typography>
+            </Box>
+        </Container>
     );
 };
 

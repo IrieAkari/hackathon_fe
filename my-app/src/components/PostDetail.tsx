@@ -158,14 +158,14 @@ const PostDetail: React.FC = () => {
                         <AnnouncementIcon style={{fontSize:30,color:'red'}}/>
                     </span>
                 )}
-                <button 
-                    onClick={handleCreateReplyClick} 
-                    className="create-reply-button"
+                <button
+                    type="submit"
+                    color="primary"
+                    className='reply-button'
                 >
                     リプライ
                 </button>
             </div>
-            <h3>リプライ</h3>
             {replies && replies.length > 0 ? (
                 replies.map(reply => (
                     <div 

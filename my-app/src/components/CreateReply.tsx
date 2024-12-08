@@ -8,6 +8,7 @@ import { showTooltip, hideTooltip } from '../utils/ui/tooltipUtils'; // 新し�
 import { Post } from '../types';
 import { handleUserNameClick } from '../utils/auth/handleUserNameClick';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
+import { Container, TextField, Button, Typography, Box, Alert } from '@mui/material';
 import './Page.css'; // カスタムツールチップのスタイルを追加
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -49,7 +50,7 @@ const CreateReply: React.FC = () => {
             setError('リプライ内容は200文字以内にしてください');
             return;
         }
-        if (content.length == 0) {
+        if (content.length === 0) {
             setError('投稿内容を入力してください');
             return;
         }
@@ -78,19 +79,18 @@ const CreateReply: React.FC = () => {
         }
     };
 
-
     /**
      * 親投稿をクリックしたときの処理。
      * 
      * @param parentId - 親投稿のID。
      */
-        const handleParentPostClick = (parentId: string) => {
-            if (post?.is_parent_deleted) {
-                alert('親投稿は削除されました');
-            } else {
-                navigate(`/posts/${parentId}`);
-            }
-        };
+    const handleParentPostClick = (parentId: string) => {
+        if (post?.is_parent_deleted) {
+            alert('親投稿は削除されました');
+        } else {
+            navigate(`/posts/${parentId}`);
+        }
+    };
 
     /**
      * 「いいね」ボタンをクリックしたときの処理。
@@ -105,66 +105,68 @@ const CreateReply: React.FC = () => {
     const isLiked = (postId: string) => likedPosts.has(postId);
 
     return (
-        <div className="top-page">
-            <h2>リプライ作成</h2>
+        <Container maxWidth="sm" className="top-page">
+            <h1 className='mypage'>
+                リプライ作成
+            </h1>
             {parentPost && (
                 <div className="post-container-detail">
-                <div className="post-header">
-                    {parentPost.parent_id && (
-                        <button 
-                            onClick={() => handleParentPostClick(parentPost.parent_id!)} 
-                            className="reply-label"
+                    <div className="post-header">
+                        {parentPost.parent_id && (
+                            <button 
+                                onClick={() => handleParentPostClick(parentPost.parent_id!)} 
+                                className="reply-label"
+                            >
+                                <ReplyIcon style={{fontSize:20,color:'#505b86'}}/>
+                            </button>
+                        )}
+                        <span 
+                            className="user-name" style={{ marginLeft: parentPost.parent_id ? '50px' : '0' }}
+                            onClick={() => handleUserNameClick(parentPost.user_id, setError, navigate)}
                         >
-                            <ReplyIcon style={{fontSize:20,color:'#505b86'}}/>
-                        </button>
-                    )}
-                    <span 
-                        className="user-name" style={{ marginLeft: parentPost.parent_id ? '50px' : '0' }}
-                        onClick={() => handleUserNameClick(parentPost.user_id, setError, navigate)}
-                    >
-                        {parentPost.user_name}
-                    </span> 
-                    <span className="post-date">
-                        {new Date(parentPost.created_at).toLocaleString()}
-                    </span>
-                </div>
+                            {parentPost.user_name}
+                        </span> 
+                        <span className="post-date">
+                            {new Date(parentPost.created_at).toLocaleString()}
+                        </span>
+                    </div>
                     <p className="post-content">{parentPost.content}</p>
-                    <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555' , display: 'flex', alignItems: 'center'}}>
-                            {isLiked(parentPost.id) ? (
-                                <span
-                                    style={{ color: 'pink', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleLikeClick(parentPost.id);
-                                    }}
-                                >
-                                    <FavoriteIcon style={{fontSize:20,color:'pink', marginLeft: '30px'}}/>
-                                    {parentPost.likes_count}
-                                </span>
-                            ) : (
-                                <span
-                                    style={{ cursor: 'pointer' , display: 'flex', alignItems: 'center'}}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleLikeClick(parentPost.id);
-                                    }}
-                                >
-                                    <FavoriteBorderIcon  style={{fontSize:20,color:'gray', marginLeft: '30px'}}/>
-                                    {parentPost.likes_count}
-                                </span>
-                            )}
-                            {parentPost.replys_count > 0 ? (
-                                <span style={{ marginLeft: '10px', color: '#555', display: 'flex', alignItems: 'center' }}>
-                                    <ChatBubbleIcon  style={{fontSize:20,color:'MediumSeaGreen', marginLeft: '30px'}}/>
-                                    {parentPost.replys_count}
-                                </span>
-                            ) : (
-                                <span style={{ marginLeft: '10px', color: '#555' , display: 'flex', alignItems: 'center'}}>
-                                    <ChatBubbleOutlineIcon style={{fontSize:20,color:'grey', marginLeft: '30px'}}/>
-                                    {parentPost.replys_count}
-                                </span>
-                            )}
-                        </div>
+                    <div style={{ marginTop: '10px', fontSize: '0.9em', color: '#555', display: 'flex', alignItems: 'center' }}>
+                        {isLiked(parentPost.id) ? (
+                            <span
+                                style={{ color: 'pink', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleLikeClick(parentPost.id);
+                                }}
+                            >
+                                <FavoriteIcon style={{fontSize:20,color:'pink', marginLeft: '30px'}}/>
+                                {parentPost.likes_count}
+                            </span>
+                        ) : (
+                            <span
+                                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleLikeClick(parentPost.id);
+                                }}
+                            >
+                                <FavoriteBorderIcon style={{fontSize:20,color:'gray', marginLeft: '30px'}}/>
+                                {parentPost.likes_count}
+                            </span>
+                        )}
+                        {parentPost.replys_count > 0 ? (
+                            <span style={{ marginLeft: '10px', color: '#555', display: 'flex', alignItems: 'center' }}>
+                                <ChatBubbleIcon style={{fontSize:20,color:'MediumSeaGreen', marginLeft: '30px'}}/>
+                                {parentPost.replys_count}
+                            </span>
+                        ) : (
+                            <span style={{ marginLeft: '10px', color: '#555', display: 'flex', alignItems: 'center' }}>
+                                <ChatBubbleOutlineIcon style={{fontSize:20,color:'grey', marginLeft: '30px'}}/>
+                                {parentPost.replys_count}
+                            </span>
+                        )}
+                    </div>
                     {parentPost.trust_score >= 0 && parentPost.trust_score <= 49 && (
                         <span 
                             className="warning-text"
@@ -176,31 +178,57 @@ const CreateReply: React.FC = () => {
                     )}
                 </div>
             )}
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <textarea
-                        value={content}
-                        onChange={(e) => {
-                            setContent(e.target.value);
-                            if (e.target.value.length <= 200) {
-                                setError('');
-                            }
-                        }}
-                        placeholder="リプライ内容を入力してください"
-                        rows={5}
-                        cols={40}
-                    />
-                </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                <button type="submit">リプライ</button>
-            </form>
-            <button onClick={() => navigate(`/posts/${parentId}`)} style={{ marginTop: '10px' }}>戻る</button>
+            <Box
+                component="form"
+                onSubmit={handleSubmit}
+                sx={{
+                    mt: 3,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <TextField
+                    value={content}
+                    onChange={(e) => {
+                        setContent(e.target.value);
+                        if (e.target.value.length <= 200) {
+                            setError('');
+                        }
+                    }}
+                    placeholder="リプライ内容を入力してください"
+                    multiline
+                    rows={5}
+                    fullWidth
+                    variant="outlined"
+                    sx={{ mb: 2 }}
+                    className="login-input"
+                />
+                {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    sx={{ mb: 2 }}
+                    className='login-button'
+                >
+                    リプライ
+                </Button>
+                <Button
+                    onClick={() => navigate(`/posts/${parentId}`)}
+                    variant="outlined"
+                    sx={{ mb: 2 }}
+                    className='login-button-back'
+                >
+                    戻る
+                </Button>
+            </Box>
             {tooltip && tooltipPosition && (
                 <div className="tooltip" style={{ top: tooltipPosition.top, left: tooltipPosition.left }}>
                     {tooltip}
                 </div>
             )}
-        </div>
+        </Container>
     );
 };
 
