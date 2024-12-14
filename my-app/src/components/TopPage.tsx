@@ -16,6 +16,8 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 const TopPage: React.FC = () => {
     const [posts, setPosts] = useState<Post[]>([]);
+    
+    //ユーザーがいいねした投稿のid
     const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set<string>());
     const [error, setError] = useState<string>('');
     const [tooltip, setTooltip] = useState<string | null>(null); // ツールチップの状態を追加

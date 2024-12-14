@@ -3,12 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fireAuth } from '../firebase';
 import { fetchParentPost } from '../utils/API/fetchParentPost';
 import { fetchLikedPosts } from '../utils/API/fetchLikedPosts';
-import { toggleLike } from '../utils/API/toggleLike';
+import { toggleLikeDetail } from '../utils/API/toggleLikeDetail';
 import { showTooltip, hideTooltip } from '../utils/ui/tooltipUtils'; // 新しい関数をインポート
 import { Post } from '../types';
 import { handleUserNameClick } from '../utils/auth/handleUserNameClick';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
-import { Container, TextField, Button, Typography, Box, Alert } from '@mui/material';
+import { Container, TextField, Button, Box, Alert } from '@mui/material';
 import './Page.css'; // カスタムツールチップのスタイルを追加
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -19,8 +19,6 @@ import ReplyIcon from '@mui/icons-material/Reply';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const CreateReply: React.FC = () => {
-    const [post, setPost] = useState<Post | null>(null);
-    const [posts, setPosts] = useState<Post[]>([]);
     const { parentId } = useParams<{ parentId: string }>();
     const [content, setContent] = useState<string>('');
     const [error, setError] = useState<string>('');
@@ -85,7 +83,7 @@ const CreateReply: React.FC = () => {
      * @param parentId - 親投稿のID。
      */
     const handleParentPostClick = (parentId: string) => {
-        if (post?.is_parent_deleted) {
+        if (parentPost?.is_parent_deleted) {
             alert('親投稿は削除されました');
         } else {
             navigate(`/posts/${parentId}`);
@@ -97,9 +95,9 @@ const CreateReply: React.FC = () => {
      * 
      * @param postId - 投稿のID。
      */
-    const handleLikeClick = (postId: string) => {
+    const handleLikeClickParent = (postId: string) => {
         const isLiked = likedPosts.has(postId);
-        toggleLike(postId, isLiked, setLikedPosts, setPosts, setError);
+        toggleLikeDetail(postId, isLiked, setLikedPosts, setParentPost, setError);
     };
 
     const isLiked = (postId: string) => likedPosts.has(postId);
@@ -135,10 +133,10 @@ const CreateReply: React.FC = () => {
                         {isLiked(parentPost.id) ? (
                             <span
                                 style={{ color: 'pink', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                                // onClick={(e) => {
-                                //     e.stopPropagation();
-                                //     handleLikeClick(parentPost.id);
-                                // }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleLikeClickParent(parentPost.id);
+                                }}
                             >
                                 <FavoriteIcon style={{fontSize:20,color:'pink', marginLeft: '30px'}}/>
                                 {parentPost.likes_count}
@@ -146,10 +144,10 @@ const CreateReply: React.FC = () => {
                         ) : (
                             <span
                                 style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                                // onClick={(e) => {
-                                //     e.stopPropagation();
-                                //     handleLikeClick(parentPost.id);
-                                // }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleLikeClickParent(parentPost.id);
+                                }}
                             >
                                 <FavoriteBorderIcon style={{fontSize:20,color:'gray', marginLeft: '30px'}}/>
                                 {parentPost.likes_count}

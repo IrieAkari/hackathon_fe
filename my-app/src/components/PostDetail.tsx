@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './Page.css';
 import { fetchPost } from '../utils/API/fetchPost';
 import { toggleLike } from '../utils/API/toggleLike';
+import { toggleLikeDetail } from '../utils/API/toggleLikeDetail';
 import { fetchReplies } from '../utils/API/fetchReplies';
 import { fetchLikedPosts } from '../utils/API/fetchLikedPosts';
 import { handleUserNameClick } from '../utils/auth/handleUserNameClick';
@@ -18,11 +19,10 @@ import ReplyIcon from '@mui/icons-material/Reply';
 const PostDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [post, setPost] = useState<Post | null>(null);
-    const [posts, setPosts] = useState<Post[]>([]);
     const [replies, setReplies] = useState<Post[]>([]);
     const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set<string>());
     const [error, setError] = useState<string>('');
-    const [tooltip, setTooltip] = useState<string | null>(null); // ツールチップの状態を追加
+    const [tooltip, setTooltip] = useState<string | null>(null); 
     const [tooltipPosition, setTooltipPosition] = useState<{ top: number, left: number } | null>(null); // ツールチップの位置を追加
     const navigate = useNavigate();
 
@@ -77,11 +77,20 @@ const PostDetail: React.FC = () => {
      * 
      * @param postId - 投稿のID。
      */
-    const handleLikeClick = (postId: string) => {
+
+
+
+    const handleLikeClickDetail = (postId: string) => {
         const isLiked = likedPosts.has(postId);
-        toggleLike(postId, isLiked, setLikedPosts, setPosts, setError);
+        toggleLikeDetail(postId, isLiked, setLikedPosts, setPost, setError);
     };
 
+
+    const handleLikeClickReply = (replyId: string) => {
+        const isLiked = likedPosts.has(replyId);
+        toggleLike(replyId, isLiked, setLikedPosts, setReplies, setError);
+    };
+    
     /**
      * 投稿が「いいね」されているかどうかを確認する関数。
      * 
@@ -117,10 +126,10 @@ const PostDetail: React.FC = () => {
                             {isLiked(post.id) ? (
                                 <span
                                     style={{ color: 'pink', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                                    // onClick={(e) => {
-                                    //     e.stopPropagation();
-                                    //     handleLikeClick(post.id);
-                                    // }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClickDetail(post.id);
+                                    }}
                                 >
                                     <FavoriteIcon style={{fontSize:20,color:'pink', marginLeft: '30px'}}/>
                                     {post.likes_count}
@@ -128,10 +137,10 @@ const PostDetail: React.FC = () => {
                             ) : (
                                 <span
                                     style={{ cursor: 'pointer' , display: 'flex', alignItems: 'center'}}
-                                    // onClick={(e) => {
-                                    //     e.stopPropagation();
-                                    //     handleLikeClick(post.id);
-                                    // }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClickDetail(post.id);
+                                    }}
                                 >
                                     <FavoriteBorderIcon  style={{fontSize:20,color:'gray', marginLeft: '30px'}}/>
                                     {post.likes_count}
@@ -197,10 +206,10 @@ const PostDetail: React.FC = () => {
                             {isLiked(reply.id) ? (
                                 <span
                                     style={{ color: 'pink', cursor: 'pointer', display: 'flex', alignItems: 'center'  }}
-                                    // onClick={(e) => {
-                                    //     e.stopPropagation();
-                                    //     handleLikeClick(reply.id);
-                                    // }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClickReply(reply.id);
+                                    }}
                                 >
                                     <FavoriteIcon style={{fontSize:20,color:'pink', marginLeft: '30px'}}/>
                                     {reply.likes_count}
@@ -208,10 +217,10 @@ const PostDetail: React.FC = () => {
                             ) : (
                                 <span
                                     style={{ cursor: 'pointer' , display: 'flex', alignItems: 'center'}}
-                                    // onClick={(e) => {
-                                    //     e.stopPropagation();
-                                    //     handleLikeClick(reply.id);
-                                    // }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleLikeClickReply(reply.id);
+                                    }}
                                 >
                                     <FavoriteBorderIcon style={{fontSize:20,color:'gray', marginLeft: '30px'}}/>
                                     {reply.likes_count}
