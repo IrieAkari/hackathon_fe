@@ -78,6 +78,7 @@ const Mypage: React.FC = () => {
                             key={post.id}
                             className="post-container"
                             onClick={() => handlePostClick(post.id)}
+                            style={{ cursor: 'pointer' }}
                         >
 
                             <div className="post-header">
