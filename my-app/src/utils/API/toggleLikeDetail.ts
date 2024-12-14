@@ -3,20 +3,12 @@ import { getAuth } from 'firebase/auth';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-/**
- * 投稿の「いいね」を切り替える関数。
- * 
- * @param postId - 「いいね」をトグルする投稿のID。
- * @param isLiked - 現在の「いいね」状態。
- * @param setLikedPosts - ユーザーが「いいね」した投稿のIDをセットするための関数。
- * @param setPosts - 投稿のリストをセットするための関数。
- * @param setError - エラーメッセージをセットするための関数。
- */
-export const toggleLike = async (
+
+export const toggleLikeDetail = async (
     postId: string,
     isLiked: boolean,
     setLikedPosts: React.Dispatch<React.SetStateAction<Set<string>>>,
-    setPosts: React.Dispatch<React.SetStateAction<Post[]>>,
+    setPost: React.Dispatch<React.SetStateAction<Post | null>>,
     setError: React.Dispatch<React.SetStateAction<string>>
 ) => {
     const auth = getAuth();
@@ -30,7 +22,7 @@ export const toggleLike = async (
                     newLikedPosts.delete(postId);
                     return newLikedPosts;
                 });
-                setPosts(prev => prev.map(post => post.id === postId ? { ...post, likes_count: post.likes_count - 1 } : post));
+                setPost(prev => prev ? { ...prev, likes_count: prev.likes_count - 1 } : prev);
                 const response = await fetch(`${API_BASE_URL}/likedelete?postid=${postId}&email=${user.email}`, {
                     method: 'GET',
                 });
@@ -40,7 +32,7 @@ export const toggleLike = async (
             } else {
                 // いいねを登録
                 setLikedPosts(prev => new Set(prev).add(postId));
-                setPosts(prev => prev.map(post => post.id === postId ? { ...post, likes_count: post.likes_count + 1 } : post));
+                setPost(prev => prev ? { ...prev, likes_count: prev.likes_count + 1 } : prev);
                 const response = await fetch(`${API_BASE_URL}/likecreate`, {
                     method: 'POST',
                     headers: {
